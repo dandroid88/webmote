@@ -1,5 +1,6 @@
 #!/bin/bash
 
+deactivate 2>null
 echo 'Creating Virtual Environment'
 python installation/setup.py > webmote-env.py
 python webmote-env.py webmote-env

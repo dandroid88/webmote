@@ -2,3 +2,6 @@
 *.db
 *~
 webmote-env
+run
+reset
+clean
