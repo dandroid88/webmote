@@ -1,0 +1,43 @@
+####################
+WHICH LICENSE HERE???
+####################
+
+This project is intended to allow many different types of devices to be controlled by a web interface, IR, X10, etc.
+
+**********************
+Goals:
+**********************
+
+Extensible - plugins for new protocols and functionality
+
+Mobile web interface - works on any browser on any platform
+
+Simple enough for my parents (old) to setup
+
+*Serve media connected to the server, upload to, download to, etc
+
+**********************
+Architechture:
+**********************
+
+A web server in one's house communicates with the various connected devices as well as serving the webmote interface.  The high level architechture is that of a core and plugins that expand webmote's functionality, add protocols, etc..
+
+**********************
+Core Description:
+**********************
+
+A set of superclasses (and associated methods) for the plugins to expand on.
+
+**********************
+Plugin Description:
+**********************
+
+A set of subclasses that expand the functionality of webmote.
+
+**********************
+Tasks:
+**********************
+
+Formalize the core
+Prioritize Plugins
+Decide on more tasks lol
