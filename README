@@ -4,6 +4,9 @@ WHICH LICENSE HERE???
 
 This project is intended to allow many different types of devices to be controlled by a web interface, IR, X10, etc.
 
+The original project is located at https://github.com/azylman/webmote 
+
+
 **********************
 Goals:
 **********************
