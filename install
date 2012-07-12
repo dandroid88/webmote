@@ -5,3 +5,5 @@ python installation/setup.py > webmote-env.py
 python webmote-env.py webmote-env
 rm webmote-env.py
 
+cp -a utils/* .
+
