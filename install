@@ -1,0 +1,7 @@
+#!/bin/bash
+
+echo 'Creating Virtual Environment'
+python installation/setup.py > webmote-env.py
+python webmote-env.py webmote-env
+rm webmote-env.py
+

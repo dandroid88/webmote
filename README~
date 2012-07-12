@@ -49,8 +49,7 @@ Decide on more tasks lol
 Setup:
 **********************
 
-#install virtualenv, pip
-sudo apt-get install python-virtualenv, python-pip
+install virtualenv, pip
 cd webmote
 ./install
 
