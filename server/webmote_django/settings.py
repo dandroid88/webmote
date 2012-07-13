@@ -2,6 +2,7 @@
 import os
 
 PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+MODULES_DIR = '../../modules/'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

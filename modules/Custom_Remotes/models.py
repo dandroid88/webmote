@@ -1,0 +1,67 @@
+# Author   Daniel Myers
+# Version  0.1
+print 'Loading Custom Remotes Plugin'
+
+################
+# Remotes
+################
+
+STYLES = (
+    (1, 'Grid'),
+    (2, 'List (not implemented)'),
+    (3, 'Custom (not implemented)'),
+)
+
+class Remote(models.Model):
+    name = models.CharField(max_length=100)
+    style = models.IntegerField(choices=STYLES)
+    user = models.ForeignKey(User)
+    rows = models.IntegerField()
+
+class RemoteForm(ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Watch TV, Lights, etc.'}))
+    style = forms.ChoiceField(choices=STYLES)
+    rows = forms.IntegerField(min_value=1, max_value=20, widget=forms.TextInput(attrs={'placeholder' : 'a number between 1 and 20'}))
+    class Meta:
+        model = Remote
+        exclude = ('user',)
+
+################
+# Buttons
+################
+ICONS = (
+    ('arrow-l', 'Left Arrow'),
+    ('arrow-r', 'Right Arrow'),
+    ('arrow-u', 'Up Arrow'),
+    ('arrow-d', 'Down Arrow'),
+    ('delete', 'Delete'),
+    ('plus', 'Plus'),
+    ('minus', 'Minus'),
+    ('check', 'Check'),
+    ('gear', 'Gear'),
+    ('refresh', 'Refresh'),
+    ('forward', 'Forward'),
+    ('back', 'Back'),
+    ('grid', 'Grid'),
+    ('star', 'Star'),
+    ('alert', 'Alert'),
+    ('info', 'Info'),
+    ('home', 'Home'),
+    ('search', 'Search'),
+)
+
+class Button(models.Model):
+    name = models.CharField(max_length=100, null=True)
+    x = models.IntegerField()
+    y = models.IntegerField()
+    icon = models.CharField(max_length=50, choices=ICONS)
+    action = models.ForeignKey(Actionss, null=True)
+    url = models.CharField(max_length=1000, null=True)
+    remote = models.ForeignKey(Remote)
+
+class ButtonForm(ModelForm):
+    name = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Volume Up, Light On, etc.'}))
+    icon = forms.ChoiceField(choices=ICONS)
+    class Meta:
+        model = Button
+        exclude = ('x', 'y', 'command', 'macro', 'profile', 'url', 'remote',)

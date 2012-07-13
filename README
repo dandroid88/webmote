@@ -17,7 +17,7 @@ Mobile web interface - works on any browser on any platform
 
 Simple enough for my parents (old) to setup
 
-*Serve media connected to the server, upload to, download to, etc
+*Serve media connected to the server, upload to, download to, etc (this is more of a long term goal...)
 
 **********************
 Architechture:
@@ -35,7 +35,19 @@ A set of superclasses (and associated methods) for the plugins to expand on.
 Plugin Description:
 **********************
 
-A set of subclasses that expand the functionality of webmote.
+A set of subclasses, files and routines that expand the functionality of webmote.
+The format is as follows:
+
+A top level directory containing at least:
+    templates (directory)
+        html files containing pages specific to the plugin
+    static    (directory)
+        images, javascript, etc.
+    models.py
+    urls.py
+    views.py
+    __init__.py
+    [description.txt/xml/json]  -not sure about this, but some formated file describing the module for use in menus and global operations
 
 **********************
 Tasks:
@@ -59,3 +71,15 @@ Run (development server):
 **********************
 
 ./run
+
+
+
+%%%%%%%%%%%%
+Thoughts on how to implement:
+%%%%%%%%%%%%
+
+When each of the relavent files are loaded (models, urls, views) on server startup we should look through the modules directory for modules (subdirectories). 
+
+The settings file will need to add the static directory in each module to its set of paths.
+
+The templates I am not sure about yet.  An ok solution might be to create symlinks for each modules template files (or just the folder) in the main template folder.  If we could handle this the same way as the static files that would be best but I don't know if django has a list of directories to look for templates in or not...looking into it. 
