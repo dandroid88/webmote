@@ -1,6 +1,11 @@
+from webmote_django.webmote.models import *
+from django.db import models
+from django.contrib.auth.models import User
+from django.forms import ModelForm
+from django import forms
+
 # Author   Daniel Myers
 # Version  0.1
-print 'Loading Custom Remotes Plugin'
 
 ################
 # Remotes
@@ -17,6 +22,8 @@ class Remote(models.Model):
     style = models.IntegerField(choices=STYLES)
     user = models.ForeignKey(User)
     rows = models.IntegerField()
+    class Meta:
+        app_label = 'webmote'
 
 class RemoteForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Watch TV, Lights, etc.'}))
@@ -25,6 +32,7 @@ class RemoteForm(ModelForm):
     class Meta:
         model = Remote
         exclude = ('user',)
+        app_label = 'webmote'
 
 ################
 # Buttons
@@ -55,9 +63,11 @@ class Button(models.Model):
     x = models.IntegerField()
     y = models.IntegerField()
     icon = models.CharField(max_length=50, choices=ICONS)
-    action = models.ForeignKey(Actionss, null=True)
+    action = models.ForeignKey(Actions, null=True)
     url = models.CharField(max_length=1000, null=True)
     remote = models.ForeignKey(Remote)
+    class Meta:
+        app_label = 'webmote'
 
 class ButtonForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Volume Up, Light On, etc.'}))
@@ -65,3 +75,4 @@ class ButtonForm(ModelForm):
     class Meta:
         model = Button
         exclude = ('x', 'y', 'command', 'macro', 'profile', 'url', 'remote',)
+        app_label = 'webmote'

@@ -69,36 +69,16 @@ class UserPermissions(models.Model):
 ########################
 # Load Modules models.py
 ########################
-# http://wiki.python.org/moin/ModulesAsPlugins
+# This should live somewhere else as the views file will also need this.
+def loadModuleFile(moduleFile):
+    print '\n'
+    for dirName in os.listdir(MODULES_DIR):
+        print 'Loading ' + dirName + ' plugin (' + moduleFile + ').'
+        try:
+            sys.path.append(MODULES_DIR + dirName)
+            __import__(moduleFile)
+        finally:
+            del sys.path[-1]
+    print '\n'
 
-#for dirName in os.listdir(MODULES_DIR):
-#    print MODULES_DIR + dirName
-#    from ...modules + dirName import models
-
-#def find_modules(path="."):
-#    """Return names of modules in a directory.
-
-#    Returns module names in a list. Filenames that end in ".py" or
-#    ".pyc" are considered to be modules. The extension is not included
-#    in the returned list.
-#    """
-#    modules = set()
-#    for filename in os.listdir(path):
-#        module = None
-#        if filename.endswith(".py"):
-#            module = filename[:-3]
-#        #elif filename.endswith(".pyc"):
-#        #    module = filename[:-4]
-#        if module is not None:
-#            modules.add(module)
-#    return list(modules)
-
-#def load_module(name, path="."):
-#    """Return a named module found in a given path."""
-#    (file, pathname, description) = imp.find_module(name, path)
-#    return imp.load_module(name, file, pathname, description)
-
-#modules = []
-##for dirName in os.listdir(MODULES_DIR):
-#modules += [load_module(name, MODULES_DIR + os.listdir(MODULES_DIR)[0]) for name in find_modules(MODULES_DIR + os.listdir(MODULES_DIR)[0])]
-
+loadModuleFile('models')
