@@ -69,16 +69,11 @@ class UserPermissions(models.Model):
 ########################
 # Load Modules models.py
 ########################
-# This should live somewhere else as the views file will also need this.
-def loadModuleFile(moduleFile):
-    print '\n'
-    for dirName in os.listdir(MODULES_DIR):
-        print 'Loading ' + dirName + ' plugin (' + moduleFile + ').'
-        try:
-            sys.path.append(MODULES_DIR + dirName)
-            __import__(moduleFile)
-        finally:
-            del sys.path[-1]
-    print '\n'
-
-loadModuleFile('models')
+sys.path.append(os.path.abspath(MODULES_DIR))
+for dirName in os.listdir(MODULES_DIR):
+    try:
+        __import__(dirName + '.models')
+        print 'Loading ' + dirName + ' plugin (models).'
+    except:
+        print 'Failed to load ' + dirName + ' plugin (models).'
+del sys.path[-1]

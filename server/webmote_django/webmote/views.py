@@ -12,6 +12,8 @@ from django.contrib.auth.decorators import login_required
 from webmote_django.webmote.models import *
 import serial, sys, os, signal
 from django.utils import simplejson
+import json
+
 
 # This allows the javascript locater to find the server
 def identification(request):
@@ -32,9 +34,29 @@ def logout_view(request):
 
 @login_required
 def index(request):
-    return render_to_response('index.html', context_instance=RequestContext(request))
+    context = {}
+    context['plugins'] = []
+    for dirName in os.listdir(MODULES_DIR):
+        try:
+            json_data = open('/'.join([os.path.abspath(MODULES_DIR), dirName, 'info.json',]))
+            data = json.load(json_data)
+            context['plugins'].append({'url' : data['url'], 'name' : data['name']})
+        except:
+            print 'Failed to locate info file for ' + dirName + '!' 
+    return render_to_response('index.html', context, context_instance=RequestContext(request))
 
 @login_required
 def help(request):
     return render_to_response('help.html', context_instance=RequestContext(request))
 
+########################
+# Load Modules views.py
+########################
+sys.path.append(os.path.abspath(MODULES_DIR))
+for dirName in os.listdir(MODULES_DIR):
+    try:
+        __import__(dirName + '.views')
+        print 'Loading ' + dirName + ' plugin (views).'
+    except:
+        print 'Failed to load ' + dirName + ' plugin (views).'
+del sys.path[-1]

@@ -73,13 +73,16 @@ STATIC_URL = '/static/'
 ADMIN_MEDIA_PREFIX = '/static/admin/'
 
 # Additional locations of static files
-STATICFILES_DIRS = (
+STATICFILES_DIRS = [
     # Put strings here, like "/home/html/static" or "C:/www/django/static".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     os.path.join(PROJECT_ROOT, 'static'),
     os.path.expanduser("~"),
-)
+]
+
+for dirName in os.listdir(MODULES_DIR):
+    STATICFILES_DIRS.append('/'.join([os.path.abspath(MODULES_DIR), dirName, 'static',]))
 
 # List of finder classes that know how to find static files in
 # various locations.
@@ -114,12 +117,15 @@ TEMPLATE_DIR = '/'.join([
     'templates',
 ])
 
-TEMPLATE_DIRS = (
+TEMPLATE_DIRS = [
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
     TEMPLATE_DIR,
-)
+]
+
+for dirName in os.listdir(MODULES_DIR):
+    TEMPLATE_DIRS.append('/'.join([os.path.abspath(MODULES_DIR), dirName, 'templates',]))
 
 # Not sure what this does and/or why this is needed... -Dan
 TEMPLATE_CONTEXT_PROCESSORS = (

@@ -2,6 +2,8 @@ from django.conf.urls.defaults import patterns, include, url
 from django.conf.urls.static import static
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.conf import settings
+from webmote_django.settings import MODULES_DIR
+import os, sys, pprint
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
@@ -26,6 +28,19 @@ urlpatterns = patterns('',
     url(r'^logout/$', 'webmote_django.webmote.views.logout_view'),
     url(r'^identification/$', 'webmote_django.webmote.views.identification'),
 )
+
+########################
+# Load Modules urls.py
+########################
+sys.path.append(os.path.abspath(MODULES_DIR))
+for dirName in os.listdir(MODULES_DIR):
+    try:
+        module = __import__(dirName + '.urls', fromlist=['urls'])
+        urlpatterns += module.urls
+        print 'Loading ' + dirName + ' plugin (urls).'
+    except:
+        print 'Failed to load ' + dirName + ' plugin (urls).'
+del sys.path[-1]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
