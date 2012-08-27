@@ -1,63 +1,85 @@
-/* Webmote - Tranceiver Code
-
-Authors: Daniel Myers and Alex Wilson
-
-Description:
-This code runs on all transcievers belonging to the webmote system
-and is intended to allow two way communication via xbee modules.
-
-Modus Operandi:
-Refer to the README file in the webmote directory.
-
-Thanks to Ken Shirriff for the IRremote library.
-http://www.arcfn.com/2009/08/multi-protocol-infrared-remote-library.html
- * An IR LED must be connected to the output PWM pin 3.
-*/
-
 #include <EEPROM.h>
 #include <IRremote.h>
+#include <stdarg.h>
 
-
-#define recordWaitTime 3 //in minutes
-#define MAXMSGLEN 100
+#define MAXMSGLEN 256
 #define RECV_PIN 11
+#define IR_PIN 3
 #define BUTTON_PIN 8
 #define STATUS_PIN 13
 
+#define PANASONICADDRESS 0x4004
+
+decode_results results;
+// Storage for the recorded code
+int codeType = -1; // The type of code
+unsigned long codeValue; // The code value if not raw
+/*unsigned int rawCodes[RAWBUF]; // The durations if raw*/
+unsigned int rawCodes[200]; // The durations if raw
+int codeLen; // The length of the code
+int toggle = 0; // The RC5/6 toggle state
 IRrecv irrecv(RECV_PIN);
 IRsend irsend;
 
-decode_results results;
-
+char message[MAXMSGLEN];
+char commandType;
+int transceiverID = 0;
+int index = 0;
+char inChar = -1;
+int messageDestination;
 bool DEBUG = 0;
 
-char message[MAXMSGLEN];
-char message2[MAXMSGLEN];
-char inChar = -1;
-int index = 0;
-char commandType;
-String data;
-int messageDestination;
-int transceiverID = 0;
-String rawDataString;
-unsigned int rawData[RAWBUF];
-int rawDataBit0;
-int rawDataBit1;
-char* codeLenHEX;
-int flag = 0;
+void printfEmu(char *fmt, ... ) {
+    char tmp[128]; // resulting string limited to 128 chars
+    va_list args;
+    va_start (args, fmt );
+    vsnprintf(tmp, 128, fmt, args);
+    va_end (args);
+    Serial.print(tmp);
+}
 
-// Storage for the recorded code
-int codeType = 0; // The type of code
-unsigned long codeValue; // The code value if not raw
-unsigned int rawCodes[RAWBUF]; // The durations if raw
-int codeLen; // The length of the code
-int toggle = 0; // The RC5/6 toggle state
+void dPrint(String str) {
+    if (DEBUG) Serial.print(str);
+}
+
+void dPrintBYTE(byte in) {
+    if (DEBUG) Serial.print(in, HEX);
+}
+
+void dPrintHEX(unsigned long in) {
+    if (DEBUG) Serial.print(in, HEX);
+}
+
+void dPrintDEC(unsigned int in) {
+    if (DEBUG) Serial.print(in, DEC);
+}
+
+void dPrintLONG(unsigned long in) {
+    if (DEBUG) Serial.print(in, DEC);
+}
+
+void printIRInfo() {
+    dPrint("\nCode type is: ");
+    dPrintDEC(codeType);
+    dPrint("\nCode length is: ");
+    dPrintDEC(codeLen);
+    dPrint("\nCode value is: ");
+    if (codeType == UNKNOWN) {
+        if (DEBUG) {
+            for (int i = 0; i < RAWBUF; i++) {
+                printfEmu("%02X", rawCodes[i]);
+            }
+        }
+    } else {
+        dPrintLONG(codeValue);
+        dPrint("\n");
+    }
+}
 
 void setup() {
     Serial.begin(9600);
-    // EEPROM.write(0, 0); // Flash messageDestination on EEPROM
     restoreID();
-    irrecv.enableIRIn(); // Start the receiver
+    pinMode(RECV_PIN, INPUT);
     pinMode(BUTTON_PIN, INPUT);
     pinMode(STATUS_PIN, OUTPUT);
 }
@@ -74,7 +96,9 @@ void loop() {
                 message[index++] = inChar;
                 message[index] = '\0';
             }
-            delay(5); //When set to 10, this delay causes the serial buffer to overflow and drop the final bits of the serial string. If this is set to 1, we don't get the last digit
+            //When set to 10, this delay causes the serial buffer to overflow 
+            //and drop the final bits of the serial string. If this is set to 1, we don't get the last digit
+            delay(5); 
         }
         if (String(message) == "reset") {
             EEPROM.write(0, 0);
@@ -82,7 +106,7 @@ void loop() {
             Serial.println("Transceiver was reset.");
         } else {
             parseMessage(message);
-            if (transceiverID == messageDestination & flag == 0) {
+            if (transceiverID == messageDestination) {
                 switch (commandType) {
                     case 'p':
                         playCommand();
@@ -108,7 +132,7 @@ void loop() {
 }
 
 void requestID() {
-    delay(5000); //make sure we don't flood the server
+    delay(5000);
     Serial.println("IR_ID_REQUEST");
 }
 
@@ -120,198 +144,88 @@ void restoreID() {
 }
 
 void parseMessage(String message) {
-    // bit 0 - Transciever ID #
+    // These will eventually be changed to hex encoded values
+    // byte 0 - Transciever ID #
+    // byte 1 - Command Type (r, p, d, a, etc.)
     messageDestination = atoi(&message[0]);
-    // bit 1 - Command Type (r, p, d, a, etc.)
     commandType = char(message[1]);
-    // DATA**
-    data = message.substring(2);
-    // bit 2 - Data Protocol (NEC, Raw, etc. represented as integer values)
-    codeType = atoi(&(message.substring(2,3))[0]);
-    // bit 3 and 4 - IR code length as a HEX number
-    codeLen = strtol((&(message.substring(3,5))[0]), &codeLenHEX , 16);
-    // bit 5 to end - IR Code
-    
-    //Serial.print(message);
-    dPrint("\n");
-    if (codeType == 0) {
-      char messageData[codeLen];
-            for (int i = 1; i <= (codeLen); i++) {
-                rawDataBit1 = strtol((&(message.substring( (i-1)*2+5 , (i-1)*2+7 ))[0]), &codeLenHEX , 16);
-                rawData[i] =  rawDataBit1;
-            }
-            dPrint("\n");
-            
-            
-            for (int i = 1; i <= codeLen; i++) {
-              if (i % 2) {
-                  // Mark
-                  rawCodes[i - 1] = rawData[i]*USECPERTICK - MARK_EXCESS;
-                  dPrint(" m");
-              } 
-              else {
-                  // Space
-                  rawCodes[i - 1] = rawData[i]*USECPERTICK + MARK_EXCESS;
-                  dPrint(" s");
-              }
-              dPrintDEC(rawCodes[i - 1]);
-            }
-            
-            codeValue = 0;
-        }
-    else codeValue = atol(&message[5]);
-
-    dPrint("\nParsed Message: \n");
-    dPrint("\tDestination: ");
-    dPrintDEC(messageDestination);
-    dPrint("\n\tCommand Type: ");
-    dPrintDEC(commandType);
-    dPrint("\n\tIR Protocol: ");
-    switch (codeType) {
-        case 1:
-            dPrint("NEC");
-            break;
-        case 2:
-            dPrint("SONY");
-            break;
-        case 3:
-            dPrint("RC5");
-            break;
-        case 4:
-            dPrint("RC6");
-            break;
-        case 0:
-            dPrint("RAW");
-            break;
-        default:
-            dPrintDEC(codeType);
-            break;
-    }
-    dPrint("\n\tIR Code Data: ");
-    if (codeType == 0) {
-      for (int i = 1; i <= codeLen; i++) {
-        dPrintDEC(rawData[i]);
-        dPrint(" ");
-      }
-    }
-    else 
-      dPrintLONG(codeValue);
-    dPrint("\n\tIR Code Length: ");
-    dPrintDEC(codeLen);
-    dPrint("\n");
-}
-
-void playCommand() {
-    dPrint("Play command with data: ");
-    digitalWrite(STATUS_PIN, HIGH);
-    //parseIRData(data);
-    dPrintLONG(codeValue);
-    dPrint("\n");
-
-    sendCode(0, codeValue);
-    delay(100);
-    Serial.flush();
-
-    digitalWrite(STATUS_PIN, LOW);
-}
-
-void recordCommand() {
-    dPrint("Record command\n");
-    digitalWrite(STATUS_PIN, HIGH);
-    irrecv.enableIRIn();
-    // Eventually should add a timeout here
-    while (!irrecv.decode(&results)) {}
-    storeCode(&results);
-    
-    if(codeType == UNKNOWN) {
-        String dataStringHold;
-        dPrint("\nRaw Code HEX data:\n");
-        Serial.print(String(transceiverID) + String("p") + "0" + String(codeLen,HEX));
-        for (int i = 1; i <= codeLen; i++) {
-                dataStringHold = String(char((&results)->rawbuf[i]));
-                if( int((&results)->rawbuf[i]) < 16 ) {Serial.print("0");}
-                Serial.print(( ((&results)->rawbuf[i]) ), HEX);
-        }
-        Serial.print("\n");
-    }
-    
-    irrecv.resume();
-    dPrint("\nSent to server: ");
-    if(codeType != UNKNOWN)
-        Serial.println(String(transceiverID) + String("p") + String(codeType) + String(codeLen,HEX) + String(codeValue));
-    digitalWrite(STATUS_PIN, LOW);
 }
 
 void assignID() {
     digitalWrite(STATUS_PIN, HIGH);
-    EEPROM.write(0, atoi(&data[0]));
-    transceiverID = atoi(&data[0]);
+    transceiverID = atoi(&message[2]);
+    EEPROM.write(0, transceiverID);
+    digitalWrite(STATUS_PIN, LOW);
+
     dPrint("Assigned ID to transceiver: ");
     dPrintDEC(transceiverID);
     dPrint("\n");
+}
+
+void playCommand() {
+    dPrint("\nPlaying a command\n");
+    digitalWrite(STATUS_PIN, HIGH);
+
+    // Restore values for playback
+    sscanf(&message[2], "%4x%4x", &codeType, &codeLen);
+
+    if (codeType == UNKNOWN) {
+        // NOT TESTED
+        for (int i = 0; i < RAWBUF; i++) {
+            sscanf(&message[10 + i*4], "%4X", &rawCodes[i]);
+        }
+    } else {
+        sscanf(&message[10], "%8x", &codeValue);
+    }
+    Serial.flush();
+
+    // Play the code
+    sendCode(false);
+    digitalWrite(STATUS_PIN, LOW);
+    digitalWrite(IR_PIN, LOW);
+
+    printIRInfo();
+}
+
+void recordCommand() {
+    digitalWrite(STATUS_PIN, HIGH);
+    irrecv.enableIRIn();
+    while (!irrecv.decode(&results)) {}
+    storeCode(&results);
+
+    // Send message
+    // Message format in Hex is AAAABBBBCCCCC...
+    // AAAA is the codeType
+    // BBBB is the codeLen
+    // CCCCC... is either the codeValue (known code types) or the rawCodes (unknown code type)
+
+    // Print out codeType
+    printfEmu("%04X", codeType);
+
+    // Print out codeLenHEX
+    printfEmu("%04X", codeLen);
+
+    if (codeType == UNKNOWN) {
+        // Print all of rawCodes (array of unsigned ints)
+        for (int i = 0; i < RAWBUF; i++) {
+            printfEmu("%02X", rawCodes[i]);
+        }
+    } else {
+        // Print codeValue
+        printfEmu("%08lX", codeValue);
+    }    
+    Serial.print("\n");
+    irrecv.resume();
     digitalWrite(STATUS_PIN, LOW);
 }
 
-void dPrint(String str) {
-    if (DEBUG) {
-        Serial.print(str);
-    }
-}
-
-void dPrintBYTE(byte in) {
-    if (DEBUG) {
-        Serial.print(in, HEX);
-    }
-}
-
-void dPrintHEX(unsigned long in) {
-    if (DEBUG) {
-        Serial.print(in, HEX);
-    }
-}
-
-void dPrintDEC(unsigned int in) {
-    if (DEBUG) {
-        Serial.print(in, DEC);
-    }
-}
-
-void dPrintLONG(unsigned long in) {
-    if (DEBUG) {
-        Serial.print(in, DEC);
-    }
-}
-
-// This extracts the IR protocol, IR signal data, and other information from the message data
-void parseIRData(String data) {
-    codeType = data[0];
-    codeLen = 32;
-    //codeValue = data.substring(1);
-
-    dPrint("\nParsed IR Data: \n");
-    dPrint("\tCode Type: ");
-    dPrintDEC(codeType);
-    dPrint("\n\tCode Length: ");
-    dPrintDEC(codeLen);
-    dPrint("\n\tIR Data: ");
-    dPrint(data);
-    dPrint("\n");
-}
-
-// Stores the code for later playback
-// Most of this code is just logging
 void storeCode(decode_results *results) {
     codeType = results->decode_type;
-    codeType = UNKNOWN;
+/*    codeType = UNKNOWN;*/
     int count = results->rawlen;
-    //codeType = UNKNOWN;
     if (codeType == UNKNOWN) {
-        dPrint("Received unknown code, saving as raw\n");
+        dPrint("\nReceived unknown code, saving as raw\n");
         codeLen = results->rawlen - 1;
-        // To store raw codes:
-        // Drop first value (gap)
-        // Convert from ticks to microseconds
-        // Tweak marks shorter, and spaces longer to cancel out IR receiver distortion
         for (int i = 1; i <= codeLen; i++) {
             if (i % 2) {
                 // Mark
@@ -326,54 +240,73 @@ void storeCode(decode_results *results) {
             dPrintDEC(rawCodes[i - 1]);
         }
         dPrint("\n");
-    }
-    else {
+    } else {
         if (codeType == NEC) {
-            dPrint("Received NEC: ");
+            dPrint("\nReceived NEC: ");
             if (results->value == REPEAT) {
                 // Don't record a NEC repeat value as that's useless.
                 dPrint("repeat; ignoring.");
-            return;
+                return;
+            }
         }
-    } 
-    else if (codeType == SONY) {
-        dPrint("Received SONY: ");
-    } 
-    else if (codeType == RC5) {
-        dPrint("Received RC5: ");
-    } 
-    else if (codeType == RC6) {
-        dPrint("Received RC6: ");
-    } 
-    else {
-        dPrint("Unexpected codeType ");
+        else if (codeType == SONY) {
+            dPrint("\nReceived SONY: ");
+        } 
+        else if (codeType == RC5) {
+            dPrint("\nReceived RC5: ");
+        } 
+        else if (codeType == RC6) {
+            dPrint("\nReceived RC6: ");
+        } 
+        else if (codeType == SHARP) {
+            dPrint("\nReceived Sharp: ");
+        } 
+        else if (codeType == PANASONIC) {
+            dPrint("\nReceived Panasonic: ");
+        }
+        else if (codeType == JVC) {
+            dPrint("\nReceived JVC: ");
+        }
+/*        else if (codeType == Sanyo) {*/
+/*            dPrint("\nReceived Sanyo: ");*/
+/*        }*/
+/*        else if (codeType == Mitsubishi) {*/
+/*            dPrint("\nReceived Mitsubishi: ");*/
+/*        }*/
+        else {
+            dPrint("\nUnexpected codeType ");
+            dPrintDEC(codeType);
+            dPrint(" ");
+        }
+
+        codeValue = results->value;
+        codeLen = results->bits;
+
         dPrintDEC(codeType);
-    dPrint(" ");
+        dPrint(" ");
+        dPrintDEC(codeLen);
+        dPrint(" ");
+        dPrintLONG(results->value);
+        dPrint("\n");
     }
-    dPrintLONG(results->value);
-    dPrint("\n");
-    codeValue = results->value;
-    codeLen = results->bits;
-  }
 }
 
-void sendCode(int repeat, long int new_code) {
-    codeValue = new_code;
+void sendCode(int repeat) {
     if (codeType == NEC) {
         if (repeat) {
             irsend.sendNEC(REPEAT, codeLen);
-            dPrint("Sent NEC repeat");
+            dPrint("\nSent NEC repeat");
         } 
         else {
             irsend.sendNEC(codeValue, codeLen);
-            dPrint("Sent NEC ");
+            dPrint("\nSent NEC ");
             dPrintHEX(codeValue);
             dPrint("\n");
         }
     }
     else if (codeType == SONY) {
         irsend.sendSony(codeValue, codeLen);
-        dPrint("Sent Sony ");
+        dPrint("\nSent Sony ");
         dPrintHEX(codeValue);
         dPrint("\n");
     } 
@@ -387,20 +320,50 @@ void sendCode(int repeat, long int new_code) {
         codeValue = codeValue | (toggle << (codeLen - 1));
         if (codeType == RC5) {
             irsend.sendRC5(codeValue, codeLen);
-            dPrint("Sent RC5 ");
+            dPrint("\nSent RC5 ");
             dPrintHEX(codeValue);
             dPrint("\n");
         } 
         else {
             irsend.sendRC6(codeValue, codeLen);
-            dPrint("Sent RC6 ");
+            dPrint("\nSent RC6 ");
             dPrintHEX(codeValue);
             dPrint("\n");
         }
     }
+    else if (codeType == SHARP) {
+        irsend.sendSharp(codeValue, codeLen);
+        dPrint("\nSent Sharp ");
+        dPrintHEX(codeValue);
+        dPrint("\n");
+    }
+    else if (codeType == PANASONIC) {
+        irsend.sendPanasonic(PANASONICADDRESS, codeValue);
+        dPrint("\nSent Panasonic ");
+        dPrintHEX(codeValue);
+        dPrint("\n");
+    }
+    else if (codeType == JVC) {
+        irsend.sendJVC(codeValue, 16, 0);
+        dPrint("\nSent JVC ");
+        dPrintHEX(codeValue);
+        dPrint("\n");
+    }
+/*    else if (codeType == SANYO) {*/
+/*        irsend.sendSanyo(codeValue, codeLen);*/
+/*        dPrint("\nSent Sanyo ");*/
+/*        dPrintHEX(codeValue);*/
+/*        dPrint("\n");*/
+/*    }*/
+/*    else if (codeType == MITSUBISHI) {*/
+/*        irsend.sendMitsubishi(codeValue, codeLen);*/
+/*        dPrint("\nSent Mitsubishi ");*/
+/*        dPrintHEX(codeValue);*/
+/*        dPrint("\n");*/
+/*    }*/
     else if (codeType == 0 /* i.e. raw */) {
         // Assume 38 KHz
         irsend.sendRaw(rawCodes, codeLen, 38);
-        dPrint("Sent raw\n");
+        dPrint("\nSent raw\n");
     }
 }
