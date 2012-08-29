@@ -22,11 +22,10 @@ class Transceivers(models.Model):
         try:
             ser = serial.Serial('/dev/ttyUSB0', 9600)
             if reset:
-                ser.write(str(self.id) + 'a' + str(0))
-                print chr(self.id)
+                ser.write("%04x" % self.id + 'a'.encode("hex") + "%04x" % 0)
             else:
-                ser.write(str(0) + 'a' + str(self.id))
-            print 'assigned tranceiver id: ' + str(self.id)
+                ser.write("%04x" % 0 + 'a'.encode("hex") + "%04x" % self.id)
+            print 'Assigned Tranceiver ID: ' + str(self.id)
         except Exception, exc:
             print str(exc)
         

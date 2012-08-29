@@ -147,7 +147,6 @@ void parseMessage(String message) {
     // AAAA - Transciever ID #
     // BBBB - Command Type (r, p, d, a, etc.)
     sscanf(&message[0], "%4x%2x", &messageDestination, &commandType);
-    Serial.print(commandType);
 }
 
 void assignID() {

@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
+from django.http import HttpResponse
+from django.utils import simplejson
 from IR.models import *
 
 @login_required
@@ -45,3 +47,11 @@ def searchForTransceiver():
     except Exception, exc:
         print str(exc)
     return HttpResponse(simplejson.dumps({'deviceType' : msg.split('_')[0] }), mimetype='application/javascript')
+
+def resetAllTransceivers():
+    Transceivers.objects.all().delete()
+    try:
+        ser = serial.Serial('/dev/ttyUSB0', 9600)
+        ser.write('reset')
+    except Exception, exc:
+        print str(exc)
