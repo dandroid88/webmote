@@ -144,16 +144,15 @@ void restoreID() {
 }
 
 void parseMessage(String message) {
-    // These will eventually be changed to hex encoded values
-    // byte 0 - Transciever ID #
-    // byte 1 - Command Type (r, p, d, a, etc.)
-    messageDestination = atoi(&message[0]);
-    commandType = char(message[1]);
+    // AAAA - Transciever ID #
+    // BBBB - Command Type (r, p, d, a, etc.)
+    sscanf(&message[0], "%4x%2x", &messageDestination, &commandType);
+    Serial.print(commandType);
 }
 
 void assignID() {
     digitalWrite(STATUS_PIN, HIGH);
-    transceiverID = atoi(&message[2]);
+    sscanf(&message[6], "%4x", &transceiverID);
     EEPROM.write(0, transceiverID);
     digitalWrite(STATUS_PIN, LOW);
 
@@ -163,19 +162,20 @@ void assignID() {
 }
 
 void playCommand() {
+    printIRInfo();
     dPrint("\nPlaying a command\n");
     digitalWrite(STATUS_PIN, HIGH);
 
     // Restore values for playback
-    sscanf(&message[2], "%4x%4x", &codeType, &codeLen);
+    sscanf(&message[6], "%4x%4x", &codeType, &codeLen);
 
     if (codeType == UNKNOWN) {
         // NOT TESTED
         for (int i = 0; i < RAWBUF; i++) {
-            sscanf(&message[10 + i*4], "%4X", &rawCodes[i]);
+            sscanf(&message[14 + i*4], "%4X", &rawCodes[i]);
         }
     } else {
-        sscanf(&message[10], "%8x", &codeValue);
+        sscanf(&message[14], "%lx", &codeValue);
     }
     Serial.flush();
 
@@ -282,13 +282,8 @@ void storeCode(decode_results *results) {
         codeValue = results->value;
         codeLen = results->bits;
 
-        dPrintDEC(codeType);
-        dPrint(" ");
-        dPrintDEC(codeLen);
-        dPrint(" ");
-        dPrintLONG(results->value);
-        dPrint("\n");
     }
+    printIRInfo();
 }
 
 void sendCode(int repeat) {
