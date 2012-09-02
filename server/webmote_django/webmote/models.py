@@ -13,8 +13,6 @@ import struct
 
 class Devices(models.Model):
     name = models.CharField(max_length=100, unique=True)
-    location = models.CharField(max_length=100)
-
     def getSubclassInstance(self):
         for deviceType in Devices.__subclasses__():
             device = deviceType.objects.filter(name=self.name)
@@ -23,7 +21,6 @@ class Devices(models.Model):
         return False
 
 class DevicesForm(ModelForm):
-    location = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. Kitchen, Den, etc.'}))
     class Meta:
         model = Devices
 
@@ -43,8 +40,8 @@ class Actions(models.Model):
                 return action[0]
         return False
 
-    def performAction(self):
-        return self.getSubclassInstance.performAction()
+    def runAction(self):
+        return self.getSubclassInstance().runAction()
 
 class ActionsForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. On, Off, etc.'}))

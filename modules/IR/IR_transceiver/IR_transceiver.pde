@@ -2,7 +2,7 @@
 #include <IRremote.h>
 #include <stdarg.h>
 
-#define MAXMSGLEN 256
+#define MAXMSGLEN 255
 #define RECV_PIN 11
 #define IR_PIN 3
 #define BUTTON_PIN 8
@@ -89,7 +89,7 @@ void loop() {
         requestID();
     }
   
-    if (Serial.available() > 2) {
+    if (Serial.available() > 3) {
         while (Serial.available()) {
             if (index < MAXMSGLEN - 1) {
                 inChar = Serial.read();
@@ -105,7 +105,7 @@ void loop() {
             transceiverID = 0;
             Serial.println("Transceiver was reset.");
         } else {
-            parseMessage(message);
+            parseMessage();
             if (transceiverID == messageDestination) {
                 switch (commandType) {
                     case 'p':
@@ -143,10 +143,12 @@ void restoreID() {
     dPrint("\n");
 }
 
-void parseMessage(String message) {
+void parseMessage() {
     // AAAA - Transciever ID #
     // BBBB - Command Type (r, p, d, a, etc.)
-    sscanf(&message[0], "%4x%2x", &messageDestination, &commandType);
+    int temp;
+    sscanf(message, "%4x%2X", &messageDestination, &temp);
+    commandType = char(temp);
 }
 
 void assignID() {

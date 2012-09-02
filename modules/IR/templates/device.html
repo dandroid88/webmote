@@ -1,0 +1,83 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+{{ device.name }} - Home Control
+{% endblock %}
+{% block page_title %}
+    {{ device.name }}
+{% endblock %}
+
+{% block content %}
+    <div data-role="content">
+        <script type="text/javascript" src="{{ STATIC_URL }}IR.js"></script>
+        <div id="recordActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+            <h2>Record an action</h2>
+            <div id="recordActionDiv">
+                <form>
+                    Name: <input type="text" id="recordActionName" placeholder="e.g. On, Off, etc."/>
+                </form>
+                <a href="#" data-role="button" data-theme="c" onclick="recordAction({{ device.id }})">Record Action</a>
+            </div>
+        </div>
+        <div id="addActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+            <h2>Add an action manually</h2>
+            <div id="addAction">
+                <form method="POST" action="">{% csrf_token %}
+                    {{ actionForm.as_table }}
+                    <input type="submit" name="addAction" value="Add Action" />
+                </form>
+            </div>
+        </div>
+        <div id="availableActionsCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+            <h2>Available Actions</h2>
+            <div id="availableActions">
+                {% if actions %}
+                    <div id="actions_grid">
+                        <div class="ui-grid-b" id="actions_grid_fields">
+                            <div class="ui-block-a">
+                                <div class="ui-bar ui-bar-a" style="height:30px">Name</div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div class="ui-bar ui-bar-a" style="height:30px">Test</div>
+                            </div>
+                            <div class="ui-block-c">
+                                <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
+                            </div>
+                        </div>
+                        {% for action in actions %}
+                        <div class="ui-grid-b" id="actions_grid_row_{{ action.id }}">
+                            <div class="ui-block-a">
+                                <div class="ui-bar ui-bar-a" style="height:30px">{{ action.name }}</div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div class="ui-bar ui-bar-a" style="height:30px">
+                                    <a href="#" data-role="button" data-theme="a" onclick="runAction('/runAction/{{ action.id }}/')">Test</a>
+                                </div>
+                            </div>
+                            <div class="ui-block-c">
+                                <div class="ui-bar ui-bar-a" style="height:30px">
+                                    <form method="post" action="">{% csrf_token %}
+                                        <input type="submit" name="deleteAction" value="Delete" onclick="this.value='{{ action.id }}';this.form.post()"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                {% else %}
+                    <h3>Currently there are no actions.</h3>
+                {% endif %}
+            </div>
+        </div>
+        <div id="deviceCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+            <h2>Edit Device</h2>
+            <div id="device">
+                <form method="post" action="">{% csrf_token %}
+                    {{ deviceForm.as_table }}
+                    <input type="submit" name="updateDevice" value="Update Device Info" />
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

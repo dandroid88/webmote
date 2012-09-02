@@ -16,6 +16,8 @@ function searchForTransceiver() {
             if (type.length > 1) {
                 $.mobile.hidePageLoadingMsg();
                 $('input[readonly="True"]').val(type);
+                $('#transceiverSearch').fadeOut();
+                $('#resetTransceivers').fadeOut();
                 $('#addTransceiverForm').fadeIn();
             } else {
                 alert('returned empty');
@@ -25,5 +27,36 @@ function searchForTransceiver() {
             $.mobile.hidePageLoadingMsg();
             alert('No transceiver found!');
         }
+    });
+}
+
+function recordAction(deviceID) {
+    $.mobile.loadingMessage = 'Aim remote at transceiver and press the button you want to record!';
+    $.mobile.showPageLoadingMsg();
+
+    // Get new commands's name (check that it isn't missing)
+    var actionName = $('#recordActionName').val();
+    if (actionName == '') {
+        $.mobile.hidePageLoadingMsg();
+        alert('Please enter a name for the action.')
+    } else {
+        // POST request with the deviceID, the command's name
+        $.ajax({
+            url: '/ir/recordAction/',
+            type: 'POST',
+            contentType: 'application/json; charset=utf-8',
+            data: JSON.stringify([deviceID, actionName]),
+            dataType: 'text',
+            success: function(result) {
+                $.mobile.hidePageLoadingMsg();
+                location.reload(true);
+            }
+        });
+    }
+}
+
+function runAction(url) {
+    $.ajax({
+        url : url,
     });
 }

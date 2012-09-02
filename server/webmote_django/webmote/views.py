@@ -49,6 +49,13 @@ def index(request):
 def help(request):
     return render_to_response('help.html', context_instance=RequestContext(request))
 
+@login_required
+def runAction(request, id):
+    action = Actions.objects.filter(id=int(id))[0]
+    action.runAction()
+    return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
+
+
 ########################
 # Load Modules views.py
 ########################
