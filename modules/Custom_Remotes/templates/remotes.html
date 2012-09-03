@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+Webmote - Remotes
+{% endblock %}
+{% block page_title %}
+    Remotes
+{% endblock %}
+
+{% block content %}
+    <div data-role="content">
+        <div id="remotes">
+            <h2>Remotes</h2>
+            <h3>Build your own custom remotes</h3>
+            <div class="ui-grid-a" id="macros_grid_fields">
+                <div class="ui-block-a">
+                    <div class="ui-bar ui-bar-a" style="height:30px">Remote</div>
+                </div>
+                <div class="ui-block-b">
+                    <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
+                </div>
+            </div>
+
+            {% for remote in remotes %}
+            <div class="ui-grid-a" id="remote_grid_row_{{ remote.id }}">
+                <div class="ui-block-a">
+                    <div class="ui-bar ui-bar-a" style="height:30px">
+                        <a style="height:100%; width:100%" href="/remote/{{ remote.id }}/">{{ remote.name }}</a>
+                    </div>
+                </div>
+                <div class="ui-block-b">
+                    <div class="ui-bar ui-bar-a" style="height:30px">
+                        <form method="post" action="">{% csrf_token %}
+                            <input type="submit" name="deleteRemote" value="Delete" onclick="this.value='{{ remote.id }}';this.form.post()"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            <div id="saveRemoteCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+                <h2>Create New Remote</h2>
+                <form name="saveRemote" method="POST">{% csrf_token %}
+                    {{ remoteForm.as_table }}
+                    <input type="submit" name="saveRemote" value="Add Remote" />
+                </form>
+            </div>
+        <div>
+    </div>
+{% endblock %}

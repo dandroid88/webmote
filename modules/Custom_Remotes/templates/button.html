@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - New Button
+{% endblock %}
+
+{% block page_title %}
+    {% if newButton %}
+        Webmote - New Button
+    {% else %}
+        Webmote - Modify Button
+    {% endif %}
+{% endblock %}
+{% block content %}
+
+<div data-role="content">	
+    <div id="modifyMacro">
+    {% if newButton %}
+        {% if newButton %}
+            <h2>New Button</h2>
+        {% else %}
+            <h2>Recreate Button</h2>
+        {% endif %}
+        <h3>Select an action:</h3>
+        <div id="newMacroAction">
+            <select id="actionType">
+                <option value="----">----</option>
+                <option value="device">Run Device Command</option>
+                <option value="profile">Load Profile</option>
+                <option value="macro">Run Macro</option>
+                <option value="url">Open URL (not implemented)</option>
+            </select>
+            <div id="selectDeviceProfileMacro" style="display:none">
+                <select id="deviceProfileMacro">
+
+                </select>
+                <div id="selectDeviceCommand" style="display:none">
+                    <select id="deviceCommand">
+
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="buttonForm">
+        <form name="saveButton" method="POST">{% csrf_token %}
+            {{ buttonForm.as_table }}
+        </form>
+    </div>
+    <div id="newActionSave" style="display:none">
+        <a href="#" data-role="button" onclick="saveNewButton();">Save</a>
+    </div>
+    {% else %}
+        <h2>Clear Button</h2>
+        <div id="clearButtonForm">
+            <form name="clearButton" method="POST">{% csrf_token %}
+                <input type="submit" name="clearButton" value="Clear Button" />
+            </form>
+        </div>        
+    {% endif %}
+</div>
+{% endblock %}

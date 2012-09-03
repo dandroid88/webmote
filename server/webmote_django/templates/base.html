@@ -1,0 +1,69 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
+   "http://www.w3.org/TR/html4/strict.dtd">
+
+<html lang="en">
+<head>
+    <link rel="icon" href="{{ STATIC_URL }}icon.png" />
+    <link rel="apple-touch-icon" href="{{ STATIC_URL }}icon.png"/>
+    <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}icon.png"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no"> 
+
+    <!-- jquery and functions -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}js/jqm/jquery.mobile-1.0.min.css" />
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
+
+    <!-- autocomplete -->
+<!--    <link rel="stylesheet" href="{{ STATIC_URL }}js/autocomplete/css/ui-lightness/autocomplete.css" />-->
+<!--    <script type="text/javascript" src="{{ STATIC_URL }}js/autocomplete/jquery-ui-1.8.20.custom.min.js"></script>-->
+
+    <!-- webmote js -->
+    <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
+
+    <script type="text/javascript">
+        // Would move this to base.js but it doesn't work???
+        $(document).bind("mobileinit", function(){
+            $.mobile.ajaxEnabled = false;
+            $.mobile.ajaxFormsEnabled = false;
+            $.mobile.ajaxLinksEnabled = false;
+            $.mobile.pushStateEnabled = false;
+//            $.mobile.defaultPageTransition = 'none';
+        });
+    </script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jqm/jquery.mobile-1.0.min.js"></script>
+ 
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <title>{% block title %}{% endblock %}</title>
+    {% if error %}
+    <script>alert('{{ error }}');</script>
+    {% endif %}
+</head>
+
+<body id="{% block body_id %}{% endblock %}">
+    <div id="body">
+        {% comment %}
+        <nav>
+            <a href="/">Home</a>
+            <a href="/ir">IR Remotes</a>
+            <a href="/lights">Lights</a>
+            <a href="/devices/">All Devices</a>
+            <a href="/setup/">Setup/Config</a>
+            <a href="/logout/" data-icon="delete">Logout</a>
+        </nav>
+        {% endcomment %}
+
+        {% block body %}
+        <div>
+            <div data-role="header" data-position="inline">
+        	    <a href="/" data-icon="home">Home</a>
+        	    <h1>{% block page_title %}{% endblock %}</h1>
+        	    <a href="/logout/" data-icon="delete">Logout</a>
+            </div>
+            {% block content_title %}{% endblock %}
+        </div>
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+        {% endblock %}
+    </div>
+</body>
+</html>

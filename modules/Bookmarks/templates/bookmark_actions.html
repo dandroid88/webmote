@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Bookmarkable Actions
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Bookmarkable Actions
+{% endblock %}
+{% block content %}
+    <div data-role="content">
+        <h2>Bookmark Actions</h2>
+        <p>If you want to run a command, set a profile, or run a macro without navigating the 
+        site or even loading a webpage you can go to one of 
+        these urls and then bookmark it.</p>
+
+        {% if devices %}
+            <div id="devices" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+                <h2>Commands</h2>
+                {% for device in devices %}
+                <div class="deviceCommands" id="{{ device.id }}" data-role="collapsible" data-collapsed="true" data-theme="a" data-content-theme="c">
+                    <h2>{{ device.name }}</h2>
+                    {% for command in device.commands %}
+                        <a href="/bookmark/command/{{ device.id }}/{{ command.id }}/" data-role="button" data-theme="c" >{{ command.name }}</a>
+                    {% endfor %}
+                </div>
+                {% endfor %}
+                
+            </div>
+        {% endif %}
+
+        {% if macros %}
+            <div id="macros" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+                <h2>Macros</h2>
+                {% for macro in macros %}
+                    <a href="/bookmark/macro/{{ macro.id }}/{{ macro.id }}/" data-role="button" data-theme="c" >{{ macro.macroName }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        {% if profiles %}
+            <div id="profiles" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+                <h2>Profiles</h2>
+                {% for profile in profiles %}
+                    <a href="/bookmark/profile/{{ profile.id }}/{{ profile.id }}/" data-role="button" data-theme="c" >{{ profile.profileName }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+    </div>
+{% endblock %}

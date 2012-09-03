@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    {{ name }}
+{% endblock %}
+
+{% block page_title %}
+    {{ name }}
+{% endblock %}
+{% block content %}
+    <div data-role="content">
+        <h2>How to bookmark this page on Android</h2>
+        <p>
+            What would be cool here is to detect the user agent and present the instructions for that specific browsers...
+        </p>
+        <h2>How to bookmark this page on iOS</h2>
+        <p>
+            blah blah blah
+        </p>
+    </div>
+{% endblock %}
