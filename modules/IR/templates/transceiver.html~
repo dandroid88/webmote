@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+Transceivers - Home Control
+{% endblock %}
+{% block page_title %}
+    Transceivers
+{% endblock %}
+
+{% block content %}
+    <div data-role="content">
+        <script type="text/javascript" src="{{ STATIC_URL }}IR.js"></script>
+        <div id="transceivers">
+            <h2>Transceivers</h2>
+            {% if transceivers %}
+                <div id="transceivers_grid">
+                    <div class="ui-grid-a" id="transceivers_grid_fields">
+                        <div class="ui-block-a">
+                            <div class="ui-bar ui-bar-a" style="height:30px">Location</div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
+                        </div>
+                    </div>
+                    {% for t in transceivers %}
+                        <div class="ui-grid-a" id="transceivers_grid_row_{{ command.id }}">
+                            <div class="ui-block-a">
+                                <div class="ui-bar ui-bar-a" style="height:30px">{{ t.location }}</div>
+                            </div>
+                            <div class="ui-block-b">
+                                <div class="ui-bar ui-bar-a" style="height:30px">
+                                    <form method="post" action="">{% csrf_token %}
+                                        <input type="submit" name="deleteTransceiver" value="Delete" onclick="this.value='{{ t.id }}';this.form.post()"/>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <h3>Currently there are no transceivers.</h3>
+            {% endif %}
+        </div>
+        <div id="addTransceiver">
+            <div id="transceiverSearch">
+                <h2>Search for new transciever</h2>
+                <a href="#" data-role="button" data-theme="c" onclick="searchForTransceiver()">Search</a>
+            </div>
+            <div id="addTransceiverForm"  style="display:none">
+                <h2>Add the new transciever</h2>
+                <form method="POST" action="">{% csrf_token %}
+                    {{ transceiversForm.as_table }}
+                    <input type="submit" name="addTransceiver" value="Add Transceiver" />
+                </form>
+            </div>
+        </div>
+        <div id="resetTransceivers">
+            <h2>Reset All Transceivers</h2>
+            <form method="POST" action="">{% csrf_token %}
+                <input type="submit" name="resetTransceivers" value="Reset All Transceivers" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

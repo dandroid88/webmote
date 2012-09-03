@@ -1,0 +1,11 @@
+from django.conf.urls.defaults import patterns, include, url
+
+urls = patterns('', 
+    url(r'^button/(?P<remoteID>\d+)/(?P<y>\d+)/(?P<x>\d+)/$', 'webmote_django.webmote.views.newButton'),
+    url(r'^button/(?P<buttonID>\d+)/$', 'webmote_django.webmote.views.editButton'),
+    url(r'^run_button/command/(?P<commandID>\d+)/$', 'webmote_django.webmote.views.commandButton'),
+    url(r'^run_button/(?P<buttonID>\d+)/$', 'webmote_django.webmote.views.runButton'),
+    url(r'^remote/(?P<remoteID>\d+)/$', 'webmote_django.webmote.views.remote'),
+    url(r'^device_remote/(?P<deviceID>\d+)/$', 'webmote_django.webmote.views.deviceRemote'),
+    url(r'^remotes/$', 'webmote_django.webmote.views.remotes'),
+)

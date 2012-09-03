@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote
+{% endblock %}
+
+{% block page_title %}
+    Webmote
+{% endblock %}
+{% block content %}
+    <div data-role="content">	
+        <ul data-role="listview" data-inset="true" id="userOptions">
+            <li><a href="addTransceiver/">Add or Reset Transceivers</a></li>
+            <li><a href="addDevice/">Add IR Device</a></li>
+            <li><a href="addAction/">Add IR Commands to Device</a></li>
+            <li><a href="deleteDevice/">Delete IR Device (not implemented)</a></li>
+            <li><a href="deleteCommand/">Delete IR Commands to Device (not implemented)</a></li>
+        </ul>
+    </div>
+{% endblock %}

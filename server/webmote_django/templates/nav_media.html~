@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+Media - Home Control
+{% endblock %}
+{% block page_title %}
+    Navigate Media
+{% endblock %}
+
+{% block content %}
+    <div data-role="content">
+        <div id="folders">
+            <h2>Folders</h2>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href=".." data-role="button" data-theme="c">Go Up</a></li>
+                    <li><a href=".." data-role="button" data-theme="c">New Folder (not done)</a></li>
+                    <li><a href=".." data-role="button" data-theme="c">Download Folder (not done)</a></li>
+                </ul>
+            </div>
+            {% if folders %}
+                {% for folder in folders %}
+                    <a href="/navigate_media/{{ folder.url }}/" data-role="button" data-theme="c">{{ folder.name }}</a>
+                {% endfor %}
+            {% else %}
+                <p>No folders found.</p>
+            {% endif %}
+        </div>
+        <div id="files">
+            <h2>Files</h2>
+            <div data-role="navbar">
+                <ul>
+                    <li><a href=".." data-role="button" data-theme="c">Upload File (not done)</a></li>
+                    <li><a href=".." data-role="button" data-theme="c">Delete File(s) (not done)</a></li>
+                </ul>
+                <br>
+            </div>
+            {% if files %}
+                {% for file in files %}
+                    <div data-role="navbar">
+                        <ul>
+                            <li>{{ file.name }}</li>
+                            <li><a href="/navigate_media/{{ file.url }}" data-role="button" data-theme="c">Play (not done)</a></li>
+                            <li><a href="/media/{{ file.url }}" data-role="button" data-theme="c">Download (not done)</a></li>
+                        </ul>
+                    </div>
+                    <!--<a href="/navigate_media/{{ file.url }}" data-role="button" data-theme="c">{{ file.name }}</a> -->
+                {% endfor %}
+            {% else %}
+                <p>No compatible files found.</p>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

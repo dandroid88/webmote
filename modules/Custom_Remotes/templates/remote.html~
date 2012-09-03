@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+    Remote - {{ remote.name }}
+{% endblock %}
+{% block page_title %}
+    {{ remote.name }}
+{% endblock %}
+
+    
+{% block content %}
+    <div data-role="content">
+<script type="text/javascript" src="{{ STATIC_URL }}Custom_Remote.js"></script>
+        {% if edit %}
+            <div id="edit_remote">
+                <select name="slider" id="edit_remote_slider" data-role="slider">
+	                <option value="off">Edit Off</option>
+	                <option value="on">Edit On</option>
+                </select>
+            </div>
+        {% endif %}
+        </br>
+        <div id="remote">
+            {% for row in remote.buttons %}
+                <div class="ui-grid-b" id="remote_grid_row_{{ row.id }}">
+                    {% if row.0 %}
+                        <div class="ui-block-a">
+                            <div class="ui-bar" style="height:60px">
+                                <a href="#" data-icon="{{row.0.icon}}" data-iconpos="bottom" style="height:100%; width:100%" onclick="remoteButton('{{ row.0.id }}')">{{ row.0.name }}</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="ui-block-a new_button" style="visibility:hidden">
+                            <div class="ui-bar" style="height:60px">
+                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/0/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button">New</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if row.1 %}
+                        <div class="ui-block-b">
+                            <div class="ui-bar" style="height:60px">
+                                <a href="#" data-icon="{{row.1.icon}}" data-iconpos="bottom" style="height:100%; width:100%" onclick="remoteButton('{{ row.1.id }}')">{{ row.1.name }}</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="ui-block-b new_button" style="visibility:hidden">
+                            <div class="ui-bar" style="height:60px">
+                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/1/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button">New</a>
+                            </div>
+                        </div>
+                    {% endif %}
+
+                    {% if row.2 %}
+                        <div class="ui-block-c">
+                            <div class="ui-bar" style="height:60px">
+                                <a href="#" data-icon="{{row.2.icon}}" data-iconpos="bottom" style="height:100%; width:100%" onclick="remoteButton('{{ row.2.id }}')">{{ row.2.name }}</a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <div class="ui-block-c new_button" style="visibility:hidden">
+                            <div class="ui-bar" style="height:60px">
+                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/2/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button">New</a>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        <div>
+    </div>
+{% endblock %}

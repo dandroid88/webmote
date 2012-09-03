@@ -1,0 +1,4 @@
+#!/bin/bash
+source webmote-env/bin/activate
+cd server/webmote_django
+python manage.py reset webmote
