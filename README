@@ -2,9 +2,9 @@
 WHICH LICENSE HERE???
 ####################
 
-This project is intended to allow many different types of devices to be controlled by a web interface, IR, X10, etc.
+This project aims to allow any type of device to be controlled by a common web interface (IR, X10, etc.).
 
-The original project is located at https://github.com/azylman/webmote 
+The original project is located at https://github.com/azylman/webmote and was written by Daniel Myers, Alex Wilson, and Alex Zylman. This rewrite serves to improve extensibility by using a plugin architechture with a minimal core and plugins for features or protocols.
 
 
 **********************
@@ -18,12 +18,6 @@ Mobile web interface - works on any browser on any platform
 Simple enough for my parents (old) to setup
 
 *Serve media connected to the server, upload to, download to, etc (this is more of a long term goal...)
-
-**********************
-Architechture:
-**********************
-
-A web server in one's house communicates with the various connected devices as well as serving the webmote interface.  The high level architechture is that of a core and plugins that expand webmote's functionality, add protocols, etc..
 
 **********************
 Core Description:
@@ -47,15 +41,24 @@ A top level directory containing at least:
     urls.py
     views.py
     __init__.py
-    [description.txt/xml/json]  -not sure about this, but some formated file describing the module for use in menus and global operations
+    info.json
+        authors
+        version
+        name
+        url
 
 **********************
 Tasks:
 **********************
 
-Formalize the core
-Prioritize Plugins
-Decide on more tasks lol
+Finish IR, Macros, Custom Remotes, Bookmarks Implementation.
+Secondary:
+    X10
+    Remote/Local Media player
+        In browser file browser
+        Mobile playback
+        Local playback
+    Raspberry pi    
 
 **********************
 Setup:
@@ -71,15 +74,3 @@ Run (development server):
 **********************
 
 ./run
-
-
-
-%%%%%%%%%%%%
-Thoughts on how to implement:
-%%%%%%%%%%%%
-
-When each of the relavent files are loaded (models, urls, views) on server startup we should look through the modules directory for modules (subdirectories). 
-
-The settings file will need to add the static directory in each module to its set of paths.
-
-The templates I am not sure about yet.  An ok solution might be to create symlinks for each modules template files (or just the folder) in the main template folder.  If we could handle this the same way as the static files that would be best but I don't know if django has a list of directories to look for templates in or not...looking into it. 
