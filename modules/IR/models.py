@@ -54,9 +54,9 @@ class IR_Devices(Devices):
         app_label = 'webmote'
 
 class IR_DevicesForm(DevicesForm):
-    brand = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. Sony, Panasonic, etc. (optional)'}))
-    deviceModelNumber = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
-    remoteModelNumber = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
+    brand = forms.CharField(required=False, widget=forms.TextInput(attrs={'placeholder': 'e.g. Sony, Panasonic, etc. (optional)'}))
+    deviceModelNumber = forms.CharField(required=False, label='Device model number', widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
+    remoteModelNumber = forms.CharField(required=False, label='Remote model number', widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
     transceiver = forms.ModelChoiceField(queryset=IR_Transceivers.objects.all())
     class Meta:
         model = IR_Devices

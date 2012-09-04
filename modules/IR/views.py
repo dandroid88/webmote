@@ -7,7 +7,10 @@ from IR.models import *
 
 @login_required
 def main(request):
-    return render_to_response('ir.html', context_instance=RequestContext(request))
+    context = {}
+    context['transceivers'] = IR_Transceivers.objects.all()
+    context['devices'] = IR_Devices.objects.all()
+    return render_to_response('ir.html', context, context_instance=RequestContext(request))
 
 @login_required
 def transceivers(request):
