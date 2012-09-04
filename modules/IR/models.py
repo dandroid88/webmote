@@ -32,6 +32,9 @@ class IR_Transceivers(models.Model):
         self.assignID(True)
         super(IR_Transceivers, self).delete(*args, **kwargs)
 
+    def __unicode__(self):
+        return u'%s' % (self.location)
+
 class IR_TransceiversForm(ModelForm):
     location = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Kitchen, Den, etc.'}))
     class Meta:
