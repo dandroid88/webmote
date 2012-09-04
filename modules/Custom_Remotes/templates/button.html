@@ -24,26 +24,6 @@
         {% else %}
             <h2>Recreate Button</h2>
         {% endif %}
-        <h3>Select an action:</h3>
-        <div id="newMacroAction">
-            <select id="actionType">
-                <option value="----">----</option>
-                <option value="device">Run Device Command</option>
-                <option value="profile">Load Profile</option>
-                <option value="macro">Run Macro</option>
-                <option value="url">Open URL (not implemented)</option>
-            </select>
-            <div id="selectDeviceProfileMacro" style="display:none">
-                <select id="deviceProfileMacro">
-
-                </select>
-                <div id="selectDeviceCommand" style="display:none">
-                    <select id="deviceCommand">
-
-                    </select>
-                </div>
-            </div>
-        </div>
     </div>
     <div id="buttonForm">
         <form name="saveButton" method="POST">{% csrf_token %}

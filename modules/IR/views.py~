@@ -120,6 +120,6 @@ def resetAllTransceivers():
     IR_Transceivers.objects.all().delete()
     try:
         ser = serial.Serial('/dev/ttyUSB0', 9600)
-        ser.write('reseta')
+        ser.write('reset')
     except Exception, exc:
         print str(exc)

@@ -13,11 +13,13 @@
 {% block content %}
     <div data-role="content">	
         <ul data-role="listview" data-inset="true" id="userOptions">
-            <li><a href="addTransceiver/">Add or Reset Transceivers</a></li>
-            <li><a href="addDevice/">Add IR Device</a></li>
-            <li><a href="addAction/">Add IR Commands to Device</a></li>
-            <li><a href="deleteDevice/">Delete IR Device (not implemented)</a></li>
-            <li><a href="deleteCommand/">Delete IR Commands to Device (not implemented)</a></li>
+            <li><a href="transceivers/">Transceivers ({{ transceivers.count }})</a></li>
+            {% if transceivers %}
+                <li><a href="devices/">Devices ({{ devices.count }})</a></li>
+                {% if devices %}
+                    <li><a href="actions/">Auto-find Actions (not implemented)</a></li>
+                {% endif %}
+            {% endif %}
         </ul>
     </div>
 {% endblock %}

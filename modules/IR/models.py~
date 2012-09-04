@@ -32,6 +32,9 @@ class IR_Transceivers(models.Model):
         self.assignID(True)
         super(IR_Transceivers, self).delete(*args, **kwargs)
 
+    def __unicode__(self):
+        return u'%s' % (self.location)
+
 class IR_TransceiversForm(ModelForm):
     location = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Kitchen, Den, etc.'}))
     class Meta:
@@ -43,17 +46,17 @@ class IR_TransceiversForm(ModelForm):
 ################
 
 class IR_Devices(Devices):
-    brand = models.CharField(max_length=100, blank=True)
-    deviceModelNumber = models.CharField(max_length=100, blank=True)
-    remoteModelNumber = models.CharField(max_length=100, blank=True)
+    brand = models.CharField(max_length=100, null=True)
+    deviceModelNumber = models.CharField(max_length=100, null=True)
+    remoteModelNumber = models.CharField(max_length=100, null=True)
     transceiver = models.ForeignKey(IR_Transceivers)
     class Meta:
         app_label = 'webmote'
 
 class IR_DevicesForm(DevicesForm):
     brand = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. Sony, Panasonic, etc. (optional)'}))
-    deviceModelNumber = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
-    remoteModelNumber = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
+    deviceModelNumber = forms.CharField(label='Device Model Number', widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
+    remoteModelNumber = forms.CharField(label='Remote Model Number', widget=forms.TextInput(attrs={'placeholder': 'e.g. abc123 (optional)'}))
     transceiver = forms.ModelChoiceField(queryset=IR_Transceivers.objects.all())
     class Meta:
         model = IR_Devices
@@ -96,7 +99,7 @@ class IR_Actions(Actions):
         if transceiverID:
             try:
                 ser = serial.Serial(USB_PORT, 9600)
-                message = "%04x" % transceiverID + 'r'.encode("hex") + str(self.code)
+                message = "%04x" % transceiverID + 'p'.encode("hex") + str(self.code)
                 ser.write(message)
                 print message
             except:
@@ -122,19 +125,3 @@ class IR_ActionsForm(ActionsForm):
 def sendTOTransceiver(id, command, data):
     print 'not implemented'
 
-
-
-#    def runCommand(self, command):
-#        print "Called run command on IR"
-#        try:
-#            ser = serial.Serial(USB_PORT, 9600)
-#            actualCommand = command.getSubclassInstance()
-#            print actualCommand.code
-#            ser.write(actualCommand.code)
-#            #response = str(ser.readline())
-#            #print response
-#            print 'Played Command Succesfully'
-#            return True
-#        except:
-#            print 'Failed to play'
-#            return False

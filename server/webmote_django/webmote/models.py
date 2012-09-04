@@ -13,12 +13,16 @@ import struct
 
 class Devices(models.Model):
     name = models.CharField(max_length=100, unique=True)
+
     def getSubclassInstance(self):
         for deviceType in Devices.__subclasses__():
             device = deviceType.objects.filter(name=self.name)
             if len(device):
                 return device[0]
         return False
+
+    def __unicode__(self):
+        return u'%s' % (self.name)
 
 class DevicesForm(ModelForm):
     class Meta:
@@ -42,6 +46,9 @@ class Actions(models.Model):
 
     def runAction(self):
         return self.getSubclassInstance().runAction()
+
+    def __unicode__(self):
+        return u'%s (%s)' % (self.name, self.device)
 
 class ActionsForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. On, Off, etc.'}))

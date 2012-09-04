@@ -4,9 +4,6 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django import forms
 
-# Author   Daniel Myers
-# Version  0.1
-
 ################
 # Remotes
 ################
