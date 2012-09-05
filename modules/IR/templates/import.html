@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Import
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Import
+{% endblock %}
+{% block content %}
+    <div data-role="content">
+        {% if form %}
+        <form name="uploadIR" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            {{ form.as_table }}
+            <input type="submit" name="uploadIR" value="Add IR" />
+        </form>
+        {% else %}
+            <h3>Either successfully added or something went wrong</h3>
+        {% endif %}
+    </div>
+{% endblock %}

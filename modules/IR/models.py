@@ -119,6 +119,16 @@ class IR_ActionsForm(ActionsForm):
 
 
 ##################
+# Import/Export Functions
+##################
+
+class UploadFileForm(forms.Form):
+    device = forms.ModelChoiceField(queryset=IR_Devices.objects.all())
+    file  = forms.FileField()
+    class Meta:
+        app_label = 'webmote'
+
+##################
 # Helper Functions
 ##################
 

@@ -104,7 +104,40 @@ def recordAction(request):
         print 'returned'
     return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
+@login_required
+def importIR(request):
+    context = {}
+    if request.method == 'POST':
+        form = UploadFileForm(request.POST, request.FILES)
+        if form.is_valid():
+            f = request.FILES['file']
+            device = Devices.objects.filter(id=int(request.POST['device']))[0]
+            readCodes = False
+            codeType = 0
+            codeLen = 0
+            for line in f:
+                if 'end codes' in line:
+                    readCodes = False
 
+                if readCodes:
+                    name, code = line.split()
+                    code = str(codeType) + str(codeLen) + code[2:]
+                    action = IR_Actions(name=name, code=code, device=device)
+                    action.save()
+
+                if 'begin codes' in line:
+                    readCodes = True
+    else:
+        context['form'] = UploadFileForm()
+    return render_to_response('import.html', context, context_instance=RequestContext(request))
+
+@login_required
+def exportIR(request):
+    return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
+
+@login_required
+def lirc(request):
+    return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
 ##################
 # Helper Functions 
