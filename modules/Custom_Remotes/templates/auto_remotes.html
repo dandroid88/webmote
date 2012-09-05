@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Device Remotes
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Device Remotes
+{% endblock %}
+{% block content %}
+    <div data-role="content">	
+        <ul data-role="listview" data-inset="true" id="userOptions">
+            {% for d in devices %}
+                <li><a href="/device_remote/{{ d.id }}">{{ d.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

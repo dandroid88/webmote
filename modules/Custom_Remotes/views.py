@@ -1,7 +1,22 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
+from django.http import HttpResponse
+from django.utils import simplejson
 from Custom_Remotes.models import *
+
+@login_required
+def customRemotes(request):
+    context = {}
+    context['customRemotes'] = Remote.objects.all()
+    context['devices'] = Devices.objects.all()
+    return render_to_response('custom_remotes.html', context, context_instance=RequestContext(request))
+
+@login_required
+def autoRemotes(request):
+    context = {}
+    context['devices'] = Devices.objects.all()
+    return render_to_response('auto_remotes.html', context, context_instance=RequestContext(request))
 
 @login_required
 def editButton(request, buttonID):
@@ -18,27 +33,17 @@ def editButton(request, buttonID):
 def newButton(request, remoteID, y, x):
     context = {}
     context['newButton'] = True
+    context['buttonForm'] = ButtonForm()
     if request.method == 'POST':
         data = simplejson.loads(request.raw_post_data)
-        print data
-        name = data[4]
-        icon = data[5]
+        actionID = data[0]
+        name = data[1]
+        icon = data[2]
         remote = Remote.objects.filter(id=remoteID)[0]
-        if data[1] == 'device':
-            device = Devices.objects.filter(name=data[2])[0]
-            command = Commands.objects.filter(name=data[3], device=device)[0]
-            newButton = Button(name=name, x=x, y=y, command=command, icon=icon, remote=remote)
-            newButton.save()
-        if data[1] == 'profile':
-            profile = Profiles.objects.filter(profileName=data[2])[0]
-            newButton = Button(name=name, x=x, y=y, profile=profile, icon=icon, remote=remote)
-            newButton.save()
-        if data[1] == 'macro':
-            macro = Macros.objects.filter(macroName=data[2])[0]
-            newButton = Button(name=name, x=x, y=y, macro=macro, icon=icon, remote=remote)
-            newButton.save()
+        action = Actions.objects.filter(id=actionID)[0]
+        newButton = Button(name=name, x=x, y=y, action=action, icon=icon, remote=remote)
+        newButton.save()
         return redirect('/remote/' + str(remoteID) + '/')
-    context['buttonForm'] = ButtonForm()
     return render_to_response('button.html', context, context_instance=RequestContext(request))
 
 @login_required
@@ -82,19 +87,18 @@ def deviceRemote(request, deviceID):
     buttons = []
     context['edit'] = False
     device = Devices.objects.filter(id=deviceID)[0]
-    commands = Commands.objects.filter(device=device)
+    actions = Actions.objects.filter(device=device)
     remote = Remote(name=device.name, style=1, user=request.user)
-    numCommands = len(commands)
-    print numCommands
-    remote.rows = numCommands / 3
-    if numCommands % 3:
+    numActions = len(actions)
+    remote.rows = numActions / 3
+    if numActions % 3:
         remote.rows += 1
     for row in range(0, remote.rows):
         buttons.append({})
         for col in range(0, 3):
-            if row * 3 + col < numCommands:
-                command = commands[row * 3 + col]
-                buttons[row][col] = Button(name=command.name, icon='star', command=command, id='command/' + str(command.id))
+            if row * 3 + col < numActions:
+                action = actions[row * 3 + col]
+                buttons[row][col] = Button(name=action.name, icon='star', action=action, id=str(action.id))
     remote.buttons = buttons
     context['remote'] = remote
     return render_to_response('remote.html', context, context_instance=RequestContext(request))

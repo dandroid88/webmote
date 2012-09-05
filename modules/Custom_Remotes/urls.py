@@ -8,4 +8,6 @@ urls = patterns('',
     url(r'^remote/(?P<remoteID>\d+)/$', 'Custom_Remotes.views.remote'),
     url(r'^device_remote/(?P<deviceID>\d+)/$', 'Custom_Remotes.views.deviceRemote'),
     url(r'^remotes/$', 'Custom_Remotes.views.remotes'),
+    url(r'^custom_remotes/$', 'Custom_Remotes.views.customRemotes'),
+    url(r'^auto_remotes/$', 'Custom_Remotes.views.autoRemotes'),
 )

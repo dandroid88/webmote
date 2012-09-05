@@ -16,43 +16,23 @@
 {% endblock %}
 {% block content %}
 
-<div data-role="content">	
-    <div id="modifyMacro">
+<div data-role="content">
+    <script type="text/javascript" src="{{ STATIC_URL }}Custom_Remote.js"></script>
     {% if newButton %}
         {% if newButton %}
             <h2>New Button</h2>
         {% else %}
             <h2>Recreate Button</h2>
         {% endif %}
-        <h3>Select an action:</h3>
-        <div id="newMacroAction">
-            <select id="actionType">
-                <option value="----">----</option>
-                <option value="device">Run Device Command</option>
-                <option value="profile">Load Profile</option>
-                <option value="macro">Run Macro</option>
-                <option value="url">Open URL (not implemented)</option>
-            </select>
-            <div id="selectDeviceProfileMacro" style="display:none">
-                <select id="deviceProfileMacro">
-
-                </select>
-                <div id="selectDeviceCommand" style="display:none">
-                    <select id="deviceCommand">
-
-                    </select>
-                </div>
-            </div>
+        <div id="buttonForm">
+            <form name="saveButton" method="POST">{% csrf_token %}
+                {{ buttonForm.as_table }}
+            </form>
         </div>
-    </div>
-    <div id="buttonForm">
-        <form name="saveButton" method="POST">{% csrf_token %}
-            {{ buttonForm.as_table }}
-        </form>
-    </div>
-    <div id="newActionSave" style="display:none">
-        <a href="#" data-role="button" onclick="saveNewButton();">Save</a>
-    </div>
+        </br>
+        <div id="newActionSave">
+            <a href="#" data-role="button" onclick="saveNewButton();">Save</a>
+        </div>
     {% else %}
         <h2>Clear Button</h2>
         <div id="clearButtonForm">

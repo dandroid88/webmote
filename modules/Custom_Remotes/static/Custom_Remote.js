@@ -3,7 +3,7 @@ function remoteButton(id) {
         window.location = '/button/' + id + '/';
     } else {
         $.ajax({
-            url: '/run_button/' + id + '/',
+            url: '/runAction/' + id + '/',
             type: 'GET',
         });
     }
@@ -16,3 +16,26 @@ $('#edit_remote_slider').change(function() {
         $('.new_button').css('visibility', 'visible');
     }
 });
+
+function saveNewButton() {
+    url = '/button' + document.URL.split('button')[1];
+    $.mobile.loadingMessage = 'Saving Button';
+    $.mobile.showPageLoadingMsg();
+
+    var data = [$('#id_action').find("option:selected").val(), 
+                $('#id_name').val(),
+                $('#id_icon').find("option:selected").val()];
+    
+    // Post this data to backend
+    $.ajax({
+        url: url,
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify(data),
+        dataType: 'text',
+        success: function(result) {
+            $.mobile.hidePageLoadingMsg();
+            window.location = "/remote/" + url.split('/')[2] + '/';
+        }
+    });
+}
