@@ -60,3 +60,65 @@ function runAction(url) {
         url : url,
     });
 }
+
+function searchLIRC(deviceID) {
+    $.mobile.loadingMessage = 'Searching, may take up to a few minutes...';
+    $.mobile.showPageLoadingMsg();
+
+    $.ajax({
+        url: '/ir/searchLIRC/' + deviceID + '/',
+        async: true,
+        type: 'GET',
+        contentType: 'application/json; charset=utf-8',
+        dataType: 'text',
+        success: function(returned) {
+            $.mobile.hidePageLoadingMsg();
+            var matches = $.parseJSON(returned);
+            if (matches.length) {
+                var select = $('#selectRemoteModel');
+                for (i = 0; i < matches.length; i++) {
+                    selected = ''
+                    if (!i) {
+                        selected = 'selected="selected"';
+                    }
+                    select.append('<option value="' + matches[i] + '"' + selected + '>' + matches[i].split('/').pop() + '</option>');
+                }
+                select.selectmenu('refresh', true);
+                $('#searchLIRC').hide();
+                $('#addActions').fadeIn();
+                $('#matches').fadeIn();
+                if (matches.length > 1) {
+                    alert('There were multiple remotes found that matched. Select the one that matches your remote control or device\'s model number.  Alternatively you may record additional commands manually which may narrow down the set of matches.');           
+                }
+            } else {
+                $.mobile.hidePageLoadingMsg();
+                alert('Unfortunately no matches were found. You will have to record your commands manually.');
+            }
+        },
+        error: function(returned) {
+            $.mobile.hidePageLoadingMsg();
+            alert('Oh dear, something went wrong searching LIRC.');
+        }
+    });
+}
+
+function addActions(deviceID) {
+    $.mobile.loadingMessage = 'Adding commands from LIRC.';
+    $.mobile.showPageLoadingMsg();
+    $.ajax({
+        url: '/ir/addFromLIRC/' + deviceID + '/',
+        type: 'POST',
+        contentType: 'application/json; charset=utf-8',
+        data: JSON.stringify($('#selectRemoteModel').find("option:selected").val()),
+        dataType: 'text',
+        success: function(result) {
+            $.mobile.hidePageLoadingMsg();
+            alert('Succesfully added new actions.');
+            location.reload(true);
+        },
+        error: function(returned) {
+            $.mobile.hidePageLoadingMsg();
+            alert('Oh dear, something went wrong adding actions from LIRC');
+        }
+    });
+}

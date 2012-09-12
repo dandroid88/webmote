@@ -4,6 +4,23 @@ from django.template import RequestContext
 from django.http import HttpResponse
 from django.utils import simplejson
 from IR.models import *
+import urllib2
+from bs4 import BeautifulSoup
+
+LIRC = 'http://lirc.sourceforge.net/remotes/'
+
+
+#class MyHTMLParser(HTMLParser):
+
+#    def handle_starttag(self, tag, attrs):
+#        print "Encountered the beginning of a %s tag" % tag
+
+#    def handle_endtag(self, tag):
+#        print "Encountered the end of a %s tag" % tag
+
+#    def handle_data(self, data):
+#        print "Encountered data %s" % data
+
 
 @login_required
 def main(request):
@@ -105,31 +122,95 @@ def recordAction(request):
     return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
 @login_required
-def importIR(request):
+def searchLIRC(request, deviceID):
+    device = Devices.objects.filter(id=int(deviceID))[0]
+    brand = device.getSubclassInstance().brand.lower()
+    deviceModelNumber = device.getSubclassInstance().deviceModelNumber.lower()
+    remoteModelNumber = device.getSubclassInstance().remoteModelNumber.lower()
+    deviceActions = device.actions_set.all()
+    
+    response = urllib2.urlopen(LIRC).read()
+    soup = BeautifulSoup(response)
+    brands = soup.table.findAll('a')
+    matches = []
+
+    for b in brands:
+        # This could maybe benefit from fuzzy matching
+        if brand in b.text.lower():
+            brandURL = LIRC + b.text
+            print 'Found brand match at ' + brandURL
+            response = urllib2.urlopen(brandURL).read()
+            soup = BeautifulSoup(response)
+            remotes = soup.table.findAll('a')
+            foundRemote = False
+            for r in remotes:
+                if len(deviceModelNumber) and deviceModelNumber.lower() in r.text.lower():
+                    print 'found device model number: ' + r.text.lower() + deviceModelNumber
+                    foundRemote = True
+                    break
+                if len(remoteModelNumber) and remoteModelNumber.lower() in r.text.lower():
+                    print 'found remote model number: ' + r.text.lower() + remoteModelNumber
+                    foundRemote = True
+                    break
+
+            if not foundRemote:
+                for r in remotes:
+                    remoteURL = LIRC + b.text + r.text
+                    try:
+                        response = urllib2.urlopen(remoteURL).read()
+                        matchCount = 0
+                        for action in deviceActions:
+                            readCodes = False
+                            recordedCodeData = action.getSubclassInstance().code[8:].replace('\n', '')
+                            for line in response.splitlines():
+                                if 'end codes' in line:
+                                    readCodes = False
+
+                                if readCodes:
+                                    name, code = line.split()
+                                    if recordedCodeData.lower() in code.lower():
+                                        matchCount += 1
+                                        break
+
+                                if 'begin codes' in line:
+                                    readCodes = True
+                        if len(deviceActions) == matchCount and len(deviceActions):
+                            matches.append(remoteURL)
+                        print remoteURL
+                    except:
+                        print 'invalid url'
+    return HttpResponse(simplejson.dumps(matches), mimetype='application/javascript')
+
+@login_required
+def addFromLIRC(request, deviceID):
     context = {}
     if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)
-        if form.is_valid():
-            f = request.FILES['file']
-            device = Devices.objects.filter(id=int(request.POST['device']))[0]
-            readCodes = False
-            codeType = 0
-            codeLen = 0
-            for line in f:
+        remoteURL = simplejson.loads(request.raw_post_data)
+        device = Devices.objects.filter(id=int(deviceID))[0]
+
+        # Get the code type and length from previously recorded commands
+        code = device.actions_set.all()[0].getSubclassInstance().code
+        codeType =  code[:4]
+        codeLen = code[4:8]
+
+        response = urllib2.urlopen(remoteURL).read()
+        readCodes = False
+        try:
+            for line in response.splitlines():
                 if 'end codes' in line:
                     readCodes = False
 
                 if readCodes:
                     name, code = line.split()
-                    code = str(codeType) + str(codeLen) + code[2:]
+                    code = codeType + codeLen + code[2:]
                     action = IR_Actions(name=name, code=code, device=device)
                     action.save()
 
                 if 'begin codes' in line:
                     readCodes = True
-    else:
-        context['form'] = UploadFileForm()
-    return render_to_response('import.html', context, context_instance=RequestContext(request))
+        except:
+            print 'failed to add actions'
+    return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
 @login_required
 def exportIR(request):
@@ -142,6 +223,9 @@ def lirc(request):
 ##################
 # Helper Functions 
 ##################
+
+def saveLIRCActions(address):
+    return 'success'
 
 def searchForTransceiver():
     msg = False
