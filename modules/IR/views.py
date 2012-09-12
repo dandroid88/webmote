@@ -216,16 +216,9 @@ def addFromLIRC(request, deviceID):
 def exportIR(request):
     return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
-@login_required
-def lirc(request):
-    return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
-
 ##################
 # Helper Functions 
 ##################
-
-def saveLIRCActions(address):
-    return 'success'
 
 def searchForTransceiver():
     msg = False

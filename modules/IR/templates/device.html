@@ -20,19 +20,21 @@
                 <a href="#" data-role="button" data-theme="c" onclick="recordAction({{ device.id }})">Record Action</a>
             </div>
         </div>
-        <div id="addActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
-            <h2>Add actions automatically</h2>
-            <div id="matches" style="display:none">
-                <select id="selectRemoteModel">
-                </select>
+        {% if actions %}
+            <div id="addActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
+                <h2>Add actions automatically</h2>
+                <div id="matches" style="display:none">
+                    <select id="selectRemoteModel">
+                    </select>
+                </div>
+                <div id="searchLIRC">
+                    <a href="#" data-role="button" data-theme="c" onclick="searchLIRC({{ device.id }})">Search for actions</a>
+                </div>
+                <div id="addActions" style="display:none">
+                    <a href="#" data-role="button" data-theme="c" onclick="addActions({{ device.id }})">Add all actions</a>
+                </div>
             </div>
-            <div id="searchLIRC">
-                <a href="#" data-role="button" data-theme="c" onclick="searchLIRC({{ device.id }})">Search for actions</a>
-            </div>
-            <div id="addActions" style="display:none">
-                <a href="#" data-role="button" data-theme="c" onclick="addActions({{ device.id }})">Add all actions</a>
-            </div>
-        </div>
+        {% endif %}
         <div id="addActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
             <h2>Add an action manually</h2>
             <div id="addAction">
