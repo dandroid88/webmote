@@ -9,19 +9,6 @@ from bs4 import BeautifulSoup
 
 LIRC = 'http://lirc.sourceforge.net/remotes/'
 
-
-#class MyHTMLParser(HTMLParser):
-
-#    def handle_starttag(self, tag, attrs):
-#        print "Encountered the beginning of a %s tag" % tag
-
-#    def handle_endtag(self, tag):
-#        print "Encountered the end of a %s tag" % tag
-
-#    def handle_data(self, data):
-#        print "Encountered data %s" % data
-
-
 @login_required
 def main(request):
     context = {}

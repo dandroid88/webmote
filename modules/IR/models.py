@@ -132,22 +132,3 @@ class UploadFileForm(forms.Form):
 # Helper Functions
 ##################
 
-def sendTOTransceiver(id, command, data):
-    print 'not implemented'
-
-
-
-#    def runCommand(self, command):
-#        print "Called run command on IR"
-#        try:
-#            ser = serial.Serial(USB_PORT, 9600)
-#            actualCommand = command.getSubclassInstance()
-#            print actualCommand.code
-#            ser.write(actualCommand.code)
-#            #response = str(ser.readline())
-#            #print response
-#            print 'Played Command Succesfully'
-#            return True
-#        except:
-#            print 'Failed to play'
-#            return False
