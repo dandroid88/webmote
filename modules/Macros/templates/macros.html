@@ -14,43 +14,37 @@ Macros - Home Control
             <h2>Macros</h2>
             <h3>Perform multiple commands automatically with a macro.</h3>
 <!--            Headers-->
-            <div class="ui-grid-c" id="macros_grid_fields">
+            <div class="ui-grid-b" id="macros_grid_fields">
                 <div class="ui-block-a">
                     <div class="ui-bar ui-bar-a" style="height:30px">Name</div>
                 </div>
                 <div class="ui-block-b">
-                    <div class="ui-bar ui-bar-a" style="height:30px">Edit</div>
-                </div>
-                <div class="ui-block-c">
                     <div class="ui-bar ui-bar-a" style="height:30px">Run Macro</div>
                 </div>
-                <div class="ui-block-d">
+                <div class="ui-block-c">
                     <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
                 </div>
             </div>
 
             {% for macro in macros %}
-            <div class="ui-grid-c" id=macros_grid_row_{{ macros.id }}">
+            <div class="ui-grid-b" id=macros_grid_row_{{ macros.id }}">
                 <div class="ui-block-a">
-                    <div class="ui-bar ui-bar-a" style="height:30px">{{ macro.macroName }}</div>
+                    <div class="ui-bar ui-bar-a" style="height:30px">
+                        <a href="/macros/macro/{{ macro.id }}/">{{ macro.name }}</a>
+                    </div>
                 </div>
                 <div class="ui-block-b">
                     <div class="ui-bar ui-bar-a" style="height:30px">
-                        <a href="/macro/{{ macro.id }}/">Edit</a>
+<!--                        Would prefer that this was done via Ajax but we can wait for later-->
+                        <form method="post" action="">{% csrf_token %}
+                            <input type="submit" name="runMacro" value="Run" onclick="this.value='{{ macro.id }}';this.form.post()"/>
+                        </form>
                     </div>
                 </div>
                 <div class="ui-block-c">
                     <div class="ui-bar ui-bar-a" style="height:30px">
-<!--                        Would prefer that this was done via Ajax but we can wait for later-->
                         <form method="post" action="">{% csrf_token %}
-                            <input type="submit" name="runMacro" value="Run" onclick="this.value='{{ macro.macroName }}';this.form.post()"/>
-                        </form>
-                    </div>
-                </div>
-                <div class="ui-block-d">
-                    <div class="ui-bar ui-bar-a" style="height:30px">
-                        <form method="post" action="">{% csrf_token %}
-                            <input type="submit" name="deleteMacro" value="Delete" onclick="this.value='{{ macro.macroName }}';this.form.post()"/>
+                            <input type="submit" name="deleteMacro" value="Delete" onclick="this.value='{{ macro.id }}';this.form.post()"/>
                         </form>
                     </div>
                 </div>

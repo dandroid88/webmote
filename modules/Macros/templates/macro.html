@@ -4,11 +4,11 @@
 {% endcomment %}
 
 {% block title %}
-    Webmote - {{ macroName }}
+    Webmote - {{ macro.name }}
 {% endblock %}
 
 {% block page_title %}
-    Webmote - {{ macroName }}
+    Webmote - {{ macro.name }}
 {% endblock %}
 {% block content %}
 <div id="macroName" style="display:none">
@@ -46,27 +46,16 @@
         {% endfor %}
         <h2>Add a new action to the macro.</h2>
         <h3>Select a new action:</h3>
-        <div id="newMacroAction">
-            <select id="actionType">
-                <option value="----">----</option>
-                <option value="device">Run Device Command</option>
-                <option value="profile">Load Profile</option>
-                <option value="macro">Run Macro</option>
-            </select>
-            <div id="selectDeviceProfileMacro" style="display:none">
-                <select id="deviceProfileMacro">
-
-                </select>
-                <div id="selectDeviceCommand" style="display:none">
-                    <select id="deviceCommand">
-
-                    </select>
+        {% if devices %}
+            {% for device in devices %}
+                <div class="deviceCommands" id="{{ device.id }}" data-role="collapsible" data-collapsed="true" data-theme="a" data-content-theme="c">
+                    <h2>{{ device.name }}</h2>
+                    {% for action in device.actions %}
+                        <a href="/bookmark/{{ action.id }}/" data-role="button" data-theme="c" >{{ action.name }}</a>
+                    {% endfor %}
                 </div>
-                <div id="newActionSave" style="display:none">
-                    <a href="#" data-role="button" onclick="saveNewAction();location.reload(true);">Save</a>
-                <div>
-            </div>
-        </div>
+            {% endfor %}
+        {% endif %}
     </div>
 </div>
 {% endblock %}

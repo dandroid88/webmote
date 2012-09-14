@@ -5,11 +5,20 @@ from django.http import HttpResponse
 from django.utils import simplejson
 from Macros.models import *
 
-
 @login_required
 def macro(request, num="0"):
     context = {}
     context['macro'] = Macro.objects.filter(id=int(num))[0]
+    context['devices'] = []
+    for device in Devices.objects.all():
+        device.actions = device.actions_set.all()
+        context['devices'].append(device)
+    device = Devices(name="Macros")
+    device.actions = []
+    for macro in Macro.objects.filter(before=None).exclude(id=int(num)):
+        device.actions.append(macro)
+    if device.actions:
+        context['devices'].append(device)
     return render_to_response('macro.html', context, context_instance=RequestContext(request))
 
 @login_required
@@ -17,12 +26,12 @@ def macros(request):
     context = {}
     if request.method == 'POST':
         if 'saveMacro' in request.POST:
-            newMacro = Macros(macroName=request.POST['macroName'], user=request.user)
+            newMacro = Macro(name=request.POST['macroName'])
             newMacro.save()
-            return redirect('/macro/' + str(newMacro.id) + '/')
+            return redirect('/macros/macro/' + str(newMacro.id) + '/')
         if 'deleteMacro' in request.POST:
-            Macros.objects.filter(macroName=request.POST['deleteMacro'], user=request.user).delete()
+            Macro.objects.filter(id=request.POST['deleteMacro']).delete()
         if 'runMacro' in request.POST:
-            runMacro(request.POST['runMacro'], request.user)
-    context['macros'] = Macro.objects.filter(before=False)
+            Macro.objects.filter(id=request.POST['runMacro']).runAction()
+    context['macros'] = Macro.objects.filter(before=None)
     return render_to_response('macros.html', context, context_instance=RequestContext(request))

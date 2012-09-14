@@ -35,7 +35,7 @@ class DevicesForm(ModelForm):
 
 class Actions(models.Model):
     name = models.CharField(max_length=100)
-    device = models.ForeignKey(Devices)
+    device = models.ForeignKey(Devices, null=True)
 
     def getSubclassInstance(self):
         for actionType in Actions.__subclasses__():
