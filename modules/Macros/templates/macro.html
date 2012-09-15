@@ -11,13 +11,9 @@
     Webmote - {{ macro.name }}
 {% endblock %}
 {% block content %}
-<div id="macroName" style="display:none">
-{{ macroName }}
-</div>
-
 <div data-role="content">	
     <div id="modifyMacro">
-        <h2>{{ macroName }}</h2>
+        <h2>{{ macro.name }}</h2>
         <div class="ui-grid-a" id="macros_grid_fields">
             <div class="ui-block-a">
                 <div class="ui-bar ui-bar-a" style="height:30px">Action</div>
@@ -26,23 +22,23 @@
                 <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
             </div>
         </div>
-        {% for macro in macros %}
-            {% if macro.runnable %}
-                <div class="ui-grid-a" id="macros_grid_row_{{ macros.id }}">
-                    <div class="ui-block-a">
-                        <div class="ui-bar ui-bar-a" style="height:30px">{{ macro.getActionName }}
-
-                        </div>
-                    </div>
-                    <div class="ui-block-b">
-                        <div class="ui-bar ui-bar-a" style="height:30px">
-                            <form method="post" action="">{% csrf_token %}
-                                <input type="submit" name="deleteMacro" value="Delete" onclick="this.value='{{ macro.macroName }}';this.form.post()"/>
-                            </form>
-                        </div>
+        {% for action in currentActions %}
+            <div class="ui-grid-a" id="macros_grid_row_{{ action.id }}">
+                <div class="ui-block-a">
+                    <div class="ui-bar ui-bar-a" style="height:30px">{{ action.name }}
+                    {% if action.device %}
+                        ({{ action.device.name }})
+                    {% endif %}
                     </div>
                 </div>
-            {% endif %}
+                <div class="ui-block-b">
+                    <div class="ui-bar ui-bar-a" style="height:30px">
+                        <form method="post" action="">{% csrf_token %}
+                            <input type="submit" name="deleteAction" value="Delete" onclick="this.value='{{ action.id }}';this.form.post()"/>
+                        </form>
+                    </div>
+                </div>
+            </div>
         {% endfor %}
         <h2>Add a new action to the macro.</h2>
         <h3>Select a new action:</h3>
@@ -51,7 +47,10 @@
                 <div class="deviceCommands" id="{{ device.id }}" data-role="collapsible" data-collapsed="true" data-theme="a" data-content-theme="c">
                     <h2>{{ device.name }}</h2>
                     {% for action in device.actions %}
-                        <a href="/bookmark/{{ action.id }}/" data-role="button" data-theme="c" >{{ action.name }}</a>
+                        <form name="addAction" method="POST">{% csrf_token %}
+                            <input type="submit" name="addAction" value="{{ action.name }}" onclick="this.value='{{ action.id }}';this.form.post()"/>
+                        </form>
+<!--                        <a href="/bookmark/{{ action.id }}/" data-role="button" data-theme="c" >{{ action.name }}</a>-->
                     {% endfor %}
                 </div>
             {% endfor %}

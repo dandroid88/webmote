@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.forms import ModelForm
 from django import forms
 from django.forms.widgets import *
+import time
 
 #################
 # Macro Action
@@ -13,7 +14,7 @@ class Macro(Actions):
     before = models.ForeignKey('self', null=True, related_name='macro_before')
     after = models.ForeignKey('self', null=True, related_name='macro_after')
     action = models.ForeignKey(Actions, null=True, related_name='macro_action')
-    delay = models.IntegerField(null=True)
+    delay = models.IntegerField(default=1)
     class Meta:
         app_label = 'webmote'
 
@@ -21,9 +22,8 @@ class Macro(Actions):
         if self.action:
             self.action.runAction()
 
-        # Delay
+        time.sleep(float(self.delay))
 
         if self.after:
             self.after.runAction()
-        print 'not finished, no delay'
 
