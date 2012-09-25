@@ -27,5 +27,14 @@
                 </div>
             {% endfor %}
         {% endif %}
+
+        {% if actions %}
+            <div class="Actions" id="otherActions" data-role="collapsible" data-collapsed="true" data-theme="a" data-content-theme="c">
+                <h2>Other Actions</h2>
+                {% for action in actions %}
+                    <a href="/bookmark/{{ action.id }}/" data-role="button" data-theme="c" >{{ action.name }}</a>
+                {% endfor %}
+            </div>
+        {% endif %}
     </div>
 {% endblock %}

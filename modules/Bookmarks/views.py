@@ -10,6 +10,7 @@ def bookmarkActions(request):
     for device in Devices.objects.all():
         device.actions = device.actions_set.all()
         context['devices'].append(device)
+    context['actions'] = Actions.objects.filter(device=None)
     return render_to_response('bookmark_actions.html', context, context_instance=RequestContext(request))
 
 @login_required

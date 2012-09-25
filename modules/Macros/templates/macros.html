@@ -13,43 +13,44 @@ Macros - Home Control
         <div id="macros">
             <h2>Macros</h2>
             <h3>Perform multiple commands automatically with a macro.</h3>
-<!--            Headers-->
-            <div class="ui-grid-b" id="macros_grid_fields">
-                <div class="ui-block-a">
-                    <div class="ui-bar ui-bar-a" style="height:30px">Name</div>
+            {% if macros %}
+                <div class="ui-grid-b" id="macros_grid_fields">
+                    <div class="ui-block-a">
+                        <div class="ui-bar ui-bar-a" style="height:30px">Name</div>
+                    </div>
+                    <div class="ui-block-b">
+                        <div class="ui-bar ui-bar-a" style="height:30px">Run Macro</div>
+                    </div>
+                    <div class="ui-block-c">
+                        <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
+                    </div>
                 </div>
-                <div class="ui-block-b">
-                    <div class="ui-bar ui-bar-a" style="height:30px">Run Macro</div>
-                </div>
-                <div class="ui-block-c">
-                    <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
-                </div>
-            </div>
 
-            {% for macro in macros %}
-            <div class="ui-grid-b" id=macros_grid_row_{{ macros.id }}">
-                <div class="ui-block-a">
-                    <div class="ui-bar ui-bar-a" style="height:30px">
-                        <a href="/macros/macro/{{ macro.id }}/">{{ macro.name }}</a>
+                {% for macro in macros %}
+                    <div class="ui-grid-b" id=macros_grid_row_{{ macros.id }}">
+                        <div class="ui-block-a">
+                            <div class="ui-bar ui-bar-a" style="height:30px">
+                                <a href="/macros/macro/{{ macro.id }}/">{{ macro.name }}</a>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div class="ui-bar ui-bar-a" style="height:30px">
+        <!-- this should be an onclick instead of inline, ill deal with it later.-->
+                                <form method="post" action="">{% csrf_token %}
+                                    <input type="submit" name="runMacro" value="Run" onclick="this.value='{{ macro.id }}';this.form.post()"/>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="ui-block-c">
+                            <div class="ui-bar ui-bar-a" style="height:30px">
+                                <form method="post" action="">{% csrf_token %}
+                                    <input type="submit" name="deleteMacro" value="Delete" onclick="this.value='{{ macro.id }}';this.form.post()"/>
+                                </form>
+                            </div>
+                        </div>
                     </div>
-                </div>
-                <div class="ui-block-b">
-                    <div class="ui-bar ui-bar-a" style="height:30px">
-<!--                        Would prefer that this was done via Ajax but we can wait for later-->
-                        <form method="post" action="">{% csrf_token %}
-                            <input type="submit" name="runMacro" value="Run" onclick="this.value='{{ macro.id }}';this.form.post()"/>
-                        </form>
-                    </div>
-                </div>
-                <div class="ui-block-c">
-                    <div class="ui-bar ui-bar-a" style="height:30px">
-                        <form method="post" action="">{% csrf_token %}
-                            <input type="submit" name="deleteMacro" value="Delete" onclick="this.value='{{ macro.id }}';this.form.post()"/>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            {% endfor %}
+                {% endfor %}
+            {% endif %}
             <div id="saveMacroCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
                 <h2>Create New Macro</h2>
                 <form name="saveMacro" method="POST">{% csrf_token %}
