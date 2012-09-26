@@ -2,6 +2,9 @@
 WHICH LICENSE HERE???
 ####################
 
+
+
+
 This project aims to allow any type of device to be controlled by a common web interface (IR, X10, etc.).
 
 The original project is located at https://github.com/azylman/webmote and was written by Daniel Myers, Alex Wilson, and Alex Zylman. This rewrite serves to improve extensibility by using a plugin architechture with a minimal core and plugins for features or protocols.
@@ -22,7 +25,6 @@ Simple enough for my parents (old) to setup
 **********************
 Core Description:
 **********************
-
 A set of superclasses (and associated methods) for the plugins to expand on.
 
 **********************
@@ -50,20 +52,18 @@ A top level directory containing at least:
 **********************
 Tasks:
 **********************
-
-Finish IR, Macros, Custom Remotes, Bookmarks Implementation.
+Raspberry pi testing
+Start on X10 plugin
 Secondary:
-    X10
     Remote/Local Media player
         In browser file browser
         Mobile playback
         Local playback
-    Raspberry pi    
+ 
 
 **********************
 Setup:
 **********************
-
 #install virtualenv, pip
 sudo apt-get install python-virtualenv, python-pip
 cd webmote
@@ -72,5 +72,4 @@ cd webmote
 **********************
 Run (development server):
 **********************
-
 ./run
