@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Help
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Help
+{% endblock %}
+{% block content %}
+    <div data-role="content">	
+        <h2>Getting Started</h2>
+<p>Conceptually, webmote has devices and actions.  The easiest way to get started is to go to the home screen and click <a href=/ir/>IR</a>.  This plugin has its own help page with instructions but the main idea is that you will add an IR device (e.g. you tv) and actions (e.g. volume up) and then be able to play them back.
+</br></br>
+You may have also noticed a button on the home screen called <a href=/remotes/>Remotes</a>. This is where you can access devices/actions in a grid of buttons, much like your actual IR remote.  By default each device has a default remote but you can also build custom remotes that have flexible layouts.
+</br></br>
+Another button on the home screen is <a href=/macros/>Macros</a> which allows you to sequentially run multiple commands.  This comes in handy if you want save a channel so you don't need to remember the channel number or if you want to automatically configure your TV, stereo and lights for playing your XBOX with the click of a button.
+</br></br>
+Lastly, <a href=/bookmark_actions/>Bookmarks</a> gives you a unique URL for your actions so that you can save a button to your browser or homescreen and run the action without having to navigate through menus and pages.
+    </div>
+{% endblock %}

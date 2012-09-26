@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% load url from future %}
+
+{% block title %}
+    Webmote - IR Help
+{% endblock %}
+
+{% block page_title %}
+    Webmote - IR Help
+{% endblock %}
+{% block content %}
+    <div data-role="content">	
+        <h2>Using the IR plugin</h2>
+<p>The first task is to add a transceiver (this is the device that transmits and recieves IR signals).  Go to the <a href="/ir/transceivers/">Transcievers</a> page and search for transceivers.  After one is found, type in the location that the transceiver will be located and save it.</br></br>
+Next you will need to add a new IR device from the <a href="/ir/devices/">Devices</a> page.  Fill out the new device form and save it.
+</br></br>
+Now from the <a href="/ir/devices/">Devices</a> page click "Record an action", add a name for the action, point the IR remote at the transceiver and hit the button your are recording. The page will then refresh automatically and then click "Available Actions."  From here you can test the action or remove it.  Sometimes, a device or remote has had its commands uploaded to the <a href="www.lirc.org">LIRC</a> database.  After recording a couple of commands, click "Add actions automatically" and search (for the device you are looking for, it helps to have correctly entered the device's brand).  If there were any matches you will be prompted accordingly.  Webmote will attempt to find any and all matches so there may be multiple remotes from LIRC suggested.  Look through these and see if they match or are close to your device's model number (or the remote for the device) and add it.  If the list of matches is exceedingly long, record more commands and before searching again.
+</p>
+    </div>
+{% endblock %}

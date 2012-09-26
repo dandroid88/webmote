@@ -18,8 +18,11 @@
     <div data-role="content">	
         <ul data-role="listview" data-inset="true" id="userOptions">
         {% for p in plugins %}
-            <li><a href="{{p.url}}">{{p.name}}</a></li>
+            {% if not "Example" in p.name %}
+                <li><a href="{{p.url}}">{{p.name}}</a></li>
+            {% endif %}
         {% endfor %}
+            <li><a href="/help/">Help</a></li>
         </ul>
     </div>
 {% endif %}

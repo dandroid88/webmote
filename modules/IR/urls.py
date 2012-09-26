@@ -8,5 +8,6 @@ urls = patterns('',
    url(r'^ir/recordAction/$', 'IR.views.recordAction'),
    url(r'^ir/searchLIRC/(?P<deviceID>\d+)/$', 'IR.views.searchLIRC'),
    url(r'^ir/addFromLIRC/(?P<deviceID>\d+)/$', 'IR.views.addFromLIRC'),
+   url(r'^ir/help/$', 'IR.views.help'),
    url(r'^ir/$', 'IR.views.main'),
 )

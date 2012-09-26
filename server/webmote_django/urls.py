@@ -27,6 +27,7 @@ urlpatterns = patterns('',
     url(r'^help/$', 'webmote_django.webmote.views.help'),
     url(r'^logout/$', 'webmote_django.webmote.views.logout_view'),
     url(r'^identification/$', 'webmote_django.webmote.views.identification'),
+    url(r'^help/$', 'webmote_django.webmote.views.help'),
     url(r'^runAction/(?P<id>\d+)/$', 'webmote_django.webmote.views.runAction'),
 )
 

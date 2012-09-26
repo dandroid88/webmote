@@ -16,6 +16,10 @@ def main(request):
     context['devices'] = IR_Devices.objects.all()
     return render_to_response('ir.html', context, context_instance=RequestContext(request))
 
+def help(request):
+    context = {}
+    return render_to_response('ir_help.html', context, context_instance=RequestContext(request))
+
 @login_required
 def transceivers(request):
     context = {}
