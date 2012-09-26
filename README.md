@@ -4,9 +4,6 @@ Not sure about a license yet...thinking about it.
   <img src="https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/remote.png"/>
   <img src="https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/record.png"/>
 </p>
-![Remote](https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/remote.png)
-![Record](https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/record.png)
-
 
 This project aims to allow any type of device to be controlled by a common web interface (IR, X10, etc.).
 
