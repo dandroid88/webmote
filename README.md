@@ -1,6 +1,15 @@
 Not sure about a license yet...thinking about it.
 =================================================
 
+<ul>
+    <li style="float:left">
+        <img src="https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/remote.png" />
+   </li>
+   <li style="float:left">
+        <img src="https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/remote.png"/>
+   </li>
+</ul>
+
 ![Remote](https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/remote.png)
 ![Record](https://raw.github.com/dmritard96/webmote/master/server/webmote_django/static/record.png)
 
