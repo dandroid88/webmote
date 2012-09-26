@@ -1,4 +1,3 @@
-=================================================
 Not sure about a license yet...thinking about it.
 =================================================
 
@@ -13,10 +12,10 @@ The original project is located at https://github.com/azylman/webmote and was wr
 
 Goals:
 ------
-*Extensible - plugins for new protocols and functionality  
-*Mobile web interface - works on any browser on any platform  
-*Simple enough for my parents (old) to setup  
-*(eventually) Serve media connected to the server, upload to, download to, etc (this is more of a long term goal...)  
+* Extensible - plugins for new protocols and functionality  
+* Mobile web interface - works on any browser on any platform  
+* Simple enough for my parents (old) to setup  
+* (eventually) Serve media connected to the server, upload to, download to, etc (this is more of a long term goal...)  
 
 
 Core Description:
@@ -30,30 +29,30 @@ A set of subclasses, files and routines that expand the functionality of webmote
 The format is as follows:  
 
 A top level directory containing at least:  
-    templates (directory)  
-        html files containing pages specific to the plugin  
-    static    (directory)  
-        images, javascript, etc.  
-    models.py  
-    urls.py  
-    views.py  
-    __init__.py  
-    info.json  
-        authors  
-        version  
-        name  
-        url  
+*    templates (directory)  
+        > html files containing pages specific to the plugin  
+*    static    (directory)  
+        > images, javascript, etc.  
+*    models.py  
+*    urls.py  
+*    views.py  
+*    __init__.py  
+*    info.json  
+        > authors  
+        > version  
+        > name  
+        > url  
 
 
 Tasks:
 ------
-Raspberry pi testing  
-Start on X10 plugin  
-Secondary:  
-    Remote/Local Media player  
-        In browser file browser  
-        Mobile playback  
-        Local playback  
+* Raspberry pi testing  
+* Start on X10 plugin  
+* Secondary:  
+   > Remote/Local Media player  
+   >     In browser file browser  
+   >     Mobile playback  
+   >     Local playback  
  
 
 Setup:
