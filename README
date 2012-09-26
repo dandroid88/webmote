@@ -2,8 +2,8 @@
 WHICH LICENSE HERE???
 ####################
 
-![Remote](https://github.com/dmritard96/webmote/blob/master/server/webmote_django/static/remote.png?raw=true)
-![Record](https://github.com/dmritard96/webmote/blob/master/server/webmote_django/static/record.png?raw=true)
+![Remote](github.com/dmritard96/webmote/blob/master/server/webmote_django/static/remote.png?raw=true)
+![Record](github.com/dmritard96/webmote/blob/master/server/webmote_django/static/record.png?raw=true)
 
 
 This project aims to allow any type of device to be controlled by a common web interface (IR, X10, etc.).
