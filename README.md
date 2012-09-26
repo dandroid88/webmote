@@ -36,7 +36,7 @@ A top level directory containing at least:
 * models.py  
 * urls.py  
 * views.py  
-* __init__.py  
+* __ init __.py  
 * info.json  
   * authors  
   * version  
