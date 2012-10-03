@@ -46,7 +46,8 @@ A top level directory containing at least:
 
 Tasks:
 ------
-* Raspberry pi testing  
+* XBMC Remote 
+* How to install dependencies for plugins
 * Start on X10 plugin  
 * Secondary:  
   * Remote/Local Media player  

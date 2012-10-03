@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Example
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Example
+{% endblock %}
+{% block content %}
+    <div data-role="content">	
+        <h2>Edit Device</h2>
+        <div id="device">
+            <form method="post" action="">{% csrf_token %}
+                {{ deviceForm.as_table }}
+                <input type="submit" name="updateDevice" value="Update Device Info" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

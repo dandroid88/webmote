@@ -71,5 +71,5 @@ class ButtonForm(ModelForm):
     icon = forms.ChoiceField(choices=ICONS)
     class Meta:
         model = Button
-        exclude = ('x', 'y', 'command', 'macro', 'profile', 'url', 'remote',)
+        exclude = ('x', 'y', 'command', 'macro', 'url', 'remote',)
         app_label = 'webmote'

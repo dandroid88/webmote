@@ -48,7 +48,11 @@ class Actions(models.Model):
         return self.getSubclassInstance().runAction()
 
     def __unicode__(self):
-        return u'%s (%s)' % (self.name, self.device)
+        if self.device:
+            return u'%s (%s)' % (self.name, self.device)
+        else:
+            action = self.getSubclassInstance()
+            return u'%s (%s)' % (action.name, type(action).__name__)
 
 class ActionsForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. On, Off, etc.'}))

@@ -2,4 +2,4 @@
 source webmote-env/bin/activate
 cd server/webmote_django
 python manage.py syncdb
-python manage.py runserver 0.0.0.0:8080
+python manage.py runserver 0.0.0.0:8081

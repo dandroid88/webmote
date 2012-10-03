@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Example
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Example
+{% endblock %}
+{% block content %}
+    <div data-role="content">
+        {% if devices %}
+            <div id="devices_grid">
+                <div class="ui-grid-a" id="devices_grid_fields">
+                    <div class="ui-block-a">
+                        <div class="ui-bar ui-bar-a" style="height:30px">Device</div>
+                    </div>
+                    <div class="ui-block-b">
+                        <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
+                    </div>
+                </div>
+                {% for d in devices %}
+                    <div class="ui-grid-a" id="devices_grid_row_{{ command.id }}">
+                        <div class="ui-block-a">
+                            <div class="ui-bar ui-bar-a" style="height:30px">
+                                <a href="/xbmc/host/{{ d.id }}">{{ d.name }}</a>
+                            </div>
+                        </div>
+                        <div class="ui-block-b">
+                            <div class="ui-bar ui-bar-a" style="height:30px">
+                                <form method="post" action="">{% csrf_token %}
+                                    <input type="submit" name="deleteDevice" value="Delete" onclick="this.value='{{ d.id }}';this.form.post()"/>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <h3>Currently there are no XBMC devices.</h3>
+        {% endif %}
+        <div id="addDevice">
+            <div id="addDeviceForm">
+                <h2>Add a new XBMC device</h2>
+                <form method="POST" action="">{% csrf_token %}
+                    {{ deviceForm.as_table }}
+                    <input type="submit" name="addDevice" value="Add Device" />
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
