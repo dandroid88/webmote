@@ -40,5 +40,4 @@ $(document).ready(function() {
 
     $('a').attr('rel','external');
 
-
 });

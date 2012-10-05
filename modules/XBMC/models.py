@@ -42,7 +42,7 @@ class XBMC_Devices(Devices):
     def saveInputActions(self):
         inputActions = self.getInputActions()
         for action in inputActions:
-            newAction = XBMC_Actions(name=action, device=self, command=action)
+            newAction = XBMC_Actions(name=action.split('.')[-1], device=self, command=action)
             newAction.save()
 
 class XBMC_DeviceForm(DevicesForm):
@@ -66,6 +66,6 @@ class XBMC_Actions(Actions):
 
     def runAction(self):
         server = jsonrpc.Server(self.device.getSubclassInstance().serverAddress())
+        print self.command, self.args
         server._request(self.command, self.args)
-        
 

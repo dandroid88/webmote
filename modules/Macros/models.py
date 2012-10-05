@@ -15,6 +15,7 @@ class Macro(Actions):
     after = models.ForeignKey('self', null=True, related_name='macro_after')
     action = models.ForeignKey(Actions, null=True, related_name='macro_action')
     delay = models.IntegerField(default=1)
+    visible = models.BooleanField(default=False)
     class Meta:
         app_label = 'webmote'
 

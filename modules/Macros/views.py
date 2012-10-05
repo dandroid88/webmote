@@ -52,7 +52,7 @@ def macros(request):
     context = {}
     if request.method == 'POST':
         if 'saveMacro' in request.POST:
-            newMacro = Macro(name=request.POST['macroName'])
+            newMacro = Macro(name=request.POST['macroName'], visible=True)
             newMacro.save()
             return redirect('/macros/macro/' + str(newMacro.id) + '/')
         if 'deleteMacro' in request.POST:

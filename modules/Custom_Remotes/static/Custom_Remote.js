@@ -1,9 +1,9 @@
-function remoteButton(id) {
+function remoteButton(buttonID, actionID) {
     if ($('#edit_remote_slider').find("option:selected").val() == 'on') {
-        window.location = '/button/' + id + '/';
+        window.location = '/button/' + buttonID + '/';
     } else {
         $.ajax({
-            url: '/runAction/' + id + '/',
+            url: '/runAction/' + actionID + '/',
             type: 'GET',
         });
     }

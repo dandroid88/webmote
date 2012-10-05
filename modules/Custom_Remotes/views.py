@@ -31,9 +31,6 @@ def editButton(request, buttonID):
 
 @login_required
 def newButton(request, remoteID, y, x):
-    context = {}
-    context['newButton'] = True
-    context['buttonForm'] = ButtonForm()
     if request.method == 'POST':
         data = simplejson.loads(request.raw_post_data)
         actionID = data[0]
@@ -41,27 +38,31 @@ def newButton(request, remoteID, y, x):
         icon = data[2]
         remote = Remote.objects.filter(id=remoteID)[0]
         action = Actions.objects.filter(id=actionID)[0]
+        print action
         newButton = Button(name=name, x=x, y=y, action=action, icon=icon, remote=remote)
         newButton.save()
         return redirect('/remote/' + str(remoteID) + '/')
+
+    context = {}
+    context['newButton'] = True
+    form = ButtonForm()
+    formActions = []
+    for action in Actions.objects.all():
+        actualAction = action.getSubclassInstance()
+        if hasattr(actualAction, 'visible'):
+            if actualAction.visible:
+                formActions.append(action.id)
+        else:
+            formActions.append(action.id)
+    form.fields['action'].queryset = Actions.objects.filter(id__in=formActions)
+    context['buttonForm'] = form
+    
     return render_to_response('button.html', context, context_instance=RequestContext(request))
 
 @login_required
 def runButton(request, buttonID):
     b = Button.objects.filter(id=buttonID)[0]
-    if b.macro:
-       runMacro(b.macro.macroName, request.user)
-    if b.profile:
-        loadProfile(b.profile.profileName)
-    if b.command:
-        runCommand(b.command.device.id, b.command.id)
-    return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
-
-@login_required
-def commandButton(request, commandID):
-    command = Commands.objects.filter(id=commandID)[0]
-    device = command.device
-    runCommand(device.id, command.id)
+    b.action.runAction()
     return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
 @login_required
