@@ -38,7 +38,6 @@ def newButton(request, remoteID, y, x):
         icon = data[2]
         remote = Remote.objects.filter(id=remoteID)[0]
         action = Actions.objects.filter(id=actionID)[0]
-        print action
         newButton = Button(name=name, x=x, y=y, action=action, icon=icon, remote=remote)
         newButton.save()
         return redirect('/remote/' + str(remoteID) + '/')
