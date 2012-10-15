@@ -71,3 +71,5 @@ Run (development server):
 ```bash
 ./run
 ```
+
+[![githalytics.com alpha](https://cruel-carlota.pagodabox.com/c6a7739f49d37ca82a30b8c7debe7609 "githalytics.com")](http://githalytics.com/dandroid88/webmote)
