@@ -10,40 +10,7 @@
 
 {% block content %}
     <div data-role="content">
-        <script type="text/javascript" src="{{ STATIC_URL }}IR.js"></script>
-        <div id="recordActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
-            <h2>Record an action</h2>
-            <div id="recordActionDiv">
-                <form>
-                    Name: <input type="text" id="recordActionName" placeholder="e.g. On, Off, etc."/>
-                </form>
-                <a href="#" data-role="button" data-theme="c" onclick="recordAction({{ device.id }})">Record Action</a>
-            </div>
-        </div>
-        {% if actions %}
-            <div id="addActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
-                <h2>Add actions automatically</h2>
-                <div id="matches" style="display:none">
-                    <select id="selectRemoteModel">
-                    </select>
-                </div>
-                <div id="searchLIRC">
-                    <a href="#" data-role="button" data-theme="c" onclick="searchLIRC({{ device.id }})">Search for actions</a>
-                </div>
-                <div id="addActions" style="display:none">
-                    <a href="#" data-role="button" data-theme="c" onclick="addActions({{ device.id }})">Add all actions</a>
-                </div>
-            </div>
-        {% endif %}
-        <div id="addActionCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
-            <h2>Add an action manually</h2>
-            <div id="addAction">
-                <form method="POST" action="">{% csrf_token %}
-                    {{ actionForm.as_table }}
-                    <input type="submit" name="addAction" value="Add Action" />
-                </form>
-            </div>
-        </div>
+        <script type="text/javascript" src="{{ STATIC_URL }}X10.js"></script>
         <div id="availableActionsCollapse" data-role="collapsible" data-collapsed="true" data-theme="c" data-content-theme="c">
             <h2>Available Actions</h2>
             <div id="availableActions">

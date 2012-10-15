@@ -55,12 +55,6 @@ function recordAction(deviceID) {
     }
 }
 
-function runAction(url) {
-    $.ajax({
-        url : url,
-    });
-}
-
 function searchLIRC(deviceID) {
     $.mobile.loadingMessage = 'Searching, may take up to a few minutes...';
     $.mobile.showPageLoadingMsg();

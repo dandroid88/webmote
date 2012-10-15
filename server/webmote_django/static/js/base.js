@@ -41,3 +41,9 @@ $(document).ready(function() {
     $('a').attr('rel','external');
 
 });
+
+function runAction(url) {
+    $.ajax({
+        url : url,
+    });
+}

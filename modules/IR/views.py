@@ -16,6 +16,7 @@ def main(request):
     context['devices'] = IR_Devices.objects.all()
     return render_to_response('ir.html', context, context_instance=RequestContext(request))
 
+@login_required
 def help(request):
     context = {}
     return render_to_response('ir_help.html', context, context_instance=RequestContext(request))
@@ -214,7 +215,7 @@ def exportIR(request):
 def searchForTransceiver():
     msg = False
     try:
-        ser = serial.Serial('/dev/ttyUSB0', 9600)
+        ser = serial.Serial(USB_PORT, 9600)
         msg = str(ser.readline())
     except Exception, exc:
         print str(exc)
@@ -223,7 +224,7 @@ def searchForTransceiver():
 def resetAllTransceivers():
     IR_Transceivers.objects.all().delete()
     try:
-        ser = serial.Serial('/dev/ttyUSB0', 9600)
+        ser = serial.Serial(USB_PORT, 9600)
         ser.write('reset')
     except Exception, exc:
         print str(exc)

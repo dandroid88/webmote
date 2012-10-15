@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote
+{% endblock %}
+
+{% block page_title %}
+    Webmote
+{% endblock %}
+{% block content %}
+    <div data-role="content">	
+        <ul data-role="listview" data-inset="true" id="userOptions">
+            <li><a href="devices/">Devices ({{ devices.count }})</a></li>
+            <li><a href="help/">Help/How-to</a></li>
+        </ul>
+    </div>
+{% endblock %}
