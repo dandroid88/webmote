@@ -55,11 +55,19 @@ ICONS = (
     ('search', 'Search'),
 )
 
+COLORS = (
+    ('a', 'Dark Gray'),
+    ('b', 'Blue'),
+    ('d', 'Light Gray'),
+    ('e', 'Yellow'),
+)
+
 class Button(models.Model):
     name = models.CharField(max_length=100, null=True)
     x = models.IntegerField()
     y = models.IntegerField()
     icon = models.CharField(max_length=50, choices=ICONS)
+    color = models.CharField(max_length=1, choices=COLORS)
     action = models.ForeignKey(Actions, null=True)
     url = models.CharField(max_length=1000, null=True)
     remote = models.ForeignKey(Remote)
@@ -69,6 +77,7 @@ class Button(models.Model):
 class ButtonForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Volume Up, Light On, etc.'}))
     icon = forms.ChoiceField(choices=ICONS)
+    color = forms.ChoiceField(choices=COLORS)
     class Meta:
         model = Button
         exclude = ('x', 'y', 'command', 'macro', 'url', 'remote')

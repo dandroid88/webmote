@@ -27,13 +27,13 @@
                     {% if row.0 %}
                         <div class="ui-block-a">
                             <div class="ui-bar" style="height:60px">
-                                <a href="#" data-icon="{{row.0.icon}}" data-iconpos="bottom" style="height:100%; width:100%" onclick="remoteButton('{{ row.0.id }}', '{{ row.0.action.id }}')">{{ row.0.name }}</a>
+                                <a href="#" data-icon="{{row.0.icon}}" data-iconpos="bottom" style="height:100%; width:100%" data-theme="{{row.0.color}}" onclick="remoteButton('{{ row.0.id }}', '{{ row.0.action.id }}')">{{ row.0.name }}</a>
                             </div>
                         </div>
                     {% else %}
                         <div class="ui-block-a new_button" style="visibility:hidden">
                             <div class="ui-bar" style="height:60px">
-                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/0/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button">New</a>
+                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/0/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button" data-theme="a">New</a>
                             </div>
                         </div>
                     {% endif %}
@@ -41,13 +41,13 @@
                     {% if row.1 %}
                         <div class="ui-block-b">
                             <div class="ui-bar" style="height:60px">
-                                <a href="#" data-icon="{{row.1.icon}}" data-iconpos="bottom" style="height:100%; width:100%" onclick="remoteButton('{{ row.1.id }}', '{{ row.1.action.id }}')">{{ row.1.name }}</a>
+                                <a href="#" data-icon="{{row.1.icon}}" data-iconpos="bottom" style="height:100%; width:100%" data-theme="{{row.1.color}}" onclick="remoteButton('{{ row.1.id }}', '{{ row.1.action.id }}')">{{ row.1.name }}</a>
                             </div>
                         </div>
                     {% else %}
                         <div class="ui-block-b new_button" style="visibility:hidden">
                             <div class="ui-bar" style="height:60px">
-                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/1/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button">New</a>
+                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/1/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button" data-theme="a">New</a>
                             </div>
                         </div>
                     {% endif %}
@@ -55,13 +55,13 @@
                     {% if row.2 %}
                         <div class="ui-block-c">
                             <div class="ui-bar" style="height:60px">
-                                <a href="#" data-icon="{{row.2.icon}}" data-iconpos="bottom" style="height:100%; width:100%" onclick="remoteButton('{{ row.2.id }}', '{{ row.2.action.id }}')">{{ row.2.name }}</a>
+                                <a href="#" data-icon="{{row.2.icon}}" data-iconpos="bottom" style="height:100%; width:100%" data-theme="{{row.2.color}}" onclick="remoteButton('{{ row.2.id }}', '{{ row.2.action.id }}')">{{ row.2.name }}</a>
                             </div>
                         </div>
                     {% else %}
                         <div class="ui-block-c new_button" style="visibility:hidden">
                             <div class="ui-bar" style="height:60px">
-                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/2/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button">New</a>
+                                <a href="/button/{{ remote.id }}/{{ forloop.counter0 }}/2/" data-icon="plus" data-iconpos="bottom" style="height:100%; width:100%" data-role="button" data-theme="a">New</a>
                             </div>
                         </div>
                     {% endif %}

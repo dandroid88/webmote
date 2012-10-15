@@ -5,7 +5,7 @@ from django.forms import ModelForm
 from django import forms
 from django.forms.widgets import *
 
-USB_PORT = '/dev/ttyUSB0'
+USB_PORT = '/dev/ttyUSB1'
 
 #runAction
 #check response? 

@@ -24,7 +24,10 @@ function saveNewButton() {
 
     var data = [$('#id_action').find("option:selected").val(), 
                 $('#id_name').val(),
-                $('#id_icon').find("option:selected").val()];
+                $('#id_icon').find("option:selected").val(),
+                $('#id_color').find("option:selected").val()
+
+               ];
     
     // Post this data to backend
     $.ajax({
