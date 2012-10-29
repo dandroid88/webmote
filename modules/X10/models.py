@@ -5,42 +5,6 @@ from django.forms import ModelForm
 from django import forms
 from django.forms.widgets import *
 
-USB_PORT = '/dev/ttyUSB1'
-
-################
-# Transcievers
-################
-
-class X10_Transceivers(models.Model):
-    location = models.CharField(max_length=100)
-    class Meta:
-        app_label = 'webmote'
-
-    def assignID(self, reset = False):
-        try:
-            ser = serial.Serial(USB_PORT, 9600)
-            if reset:
-                ser.write("%04x" % self.id + 'a'.encode("hex") + "%04x" % 0)
-                print 'Deleting Transceiver ' + str(self.id)
-            else:
-                ser.write("%04x" % 0 + 'a'.encode("hex") + "%04x" % self.id)
-                print 'Assigned Tranceiver ID: ' + str(self.id)
-        except Exception, exc:
-            print str(exc)
-        
-    def delete(self, *args, **kwargs):
-        self.assignID(True)
-        super(X10_Transceivers, self).delete(*args, **kwargs)
-
-    def __unicode__(self):
-        return u'%s' % (self.location)
-
-class X10_TransceiversForm(ModelForm):
-    location = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Kitchen, Den, etc.'}))
-    class Meta:
-        model = X10_Transceivers
-        app_label = 'webmote'
-
 #############
 # X10 Devices
 #############
@@ -109,6 +73,7 @@ class X10_Devices(Devices):
     unit = models.IntegerField()
     state = models.IntegerField(default=0)
     lastCommand = models.IntegerField(null=True)
+    transceiver = models.ForeignKey(Transceivers)
     class Meta:
         app_label = 'webmote'
 
@@ -121,6 +86,7 @@ class X10_Devices(Devices):
 class X10_DevicesForm(DevicesForm):
     house = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'A letter A-P'}))
     unit = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'A number 1-16'}))
+    transceiver = forms.ModelChoiceField(queryset=Transceivers.objects.filter(type='X10'))
     class Meta:
         model = X10_Devices
         exclude = ('state', 'lastCommand')
@@ -131,44 +97,23 @@ class X10_Actions(Actions):
     class Meta:
         app_label = 'webmote'
 
-    def getTransceiverID(self):
-        transceiver = X10_Transceivers.objects.filter(location=self.device.getSubclassInstance().transceiver.location)
-        return transceiver[0].id if transceiver else False
-
     def runAction(self):
-        transceiverID = self.getTransceiverID()
-        if transceiverID:
+        transceiver = self.getTransceiver()
+        if transceiver:
             try:
-                ser = serial.Serial(USB_PORT, 9600)
-                message = "%04x" % transceiverID + 'p'.encode("hex")
-                message = chr(int(HOUSE_CODES[device.house].replace('B', '0b0000'), 2)).encode("hex")
+                device = self.device.getSubclassInstance()
+                ser = serial.Serial('/dev/' + transceiver.usbPort, 9600)
+                message = "%04x" % transceiver.id + 'p'.encode("hex")
+                message += chr(int(HOUSE_CODES[device.house].replace('B', '0b0000'), 2)).encode("hex")
                 message += chr(int(UNIT_CODES[str(device.unit)].replace('B', '0b000'), 2)).encode("hex")
                 message += chr(int(COMMAND_CODES[self.name].replace('B', '0b000'), 2)).encode("hex")
                 ser.write(message)
-                print message
             except:
                 print 'Failed to play'
                 return False
         else:
             print 'Couldn\'t find transceiver for action'
             return False
-
-#    def runAction(self):
-#        device = self.device.getSubclassInstance()
-#        try:
-#            dev = USB_PORT
-#            ser = serial.Serial(dev, 9600)
-#            message = chr(int(HOUSE_CODES[device.house].replace('B', '0b0000'), 2))
-#            message += chr(int(UNIT_CODES[str(device.unit)].replace('B', '0b000'), 2))
-#            message += chr(int(COMMAND_CODES[self.name].replace('B', '0b000'), 2))
-#            ser.write(message)
-#            print 'Ran \'' + self.name + '\' on \'' + device.name + '\' (X10)'
-#            return True
-#        except:
-#            print 'FAILED to run \'' + self.name + '\' on \'' + device.name + '\' (X10)'
-#            return False
-
-
 
 class X10_ActionsForm(ActionsForm):
     code = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. 1110211'}))

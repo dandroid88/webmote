@@ -12,7 +12,7 @@ LIRC = 'http://lirc.sourceforge.net/remotes/'
 @login_required
 def main(request):
     context = {}
-    context['transceivers'] = IR_Transceivers.objects.all()
+    context['transceivers'] = Transceivers.objects.filter(type='IR')
     context['devices'] = IR_Devices.objects.all()
     return render_to_response('ir.html', context, context_instance=RequestContext(request))
 
@@ -24,25 +24,22 @@ def help(request):
 @login_required
 def transceivers(request):
     context = {}
+    context['type'] = 'IR'
     if request.method == 'POST':
         if 'addTransceiver' in request.POST:
-            newTForm = IR_TransceiversForm(request.POST)
+            newTForm = TransceiversForm(request.POST)
             if newTForm.is_valid():
                 newTran = newTForm.save()
                 newTran.assignID()
             else:
                 context['error'] = "Transciever was invalid."
         elif 'deleteTransceiver' in request.POST:
-            IR_Transceivers.objects.filter(id=request.POST['deleteTransceiver'])[0].delete()
+            Transceivers.objects.filter(id=request.POST['deleteTransceiver'])[0].delete()
         elif 'resetTransceivers' in request.POST:
             resetAllTransceivers()
-    context['transceivers'] = IR_Transceivers.objects.all()
-    context['transceiversForm'] = IR_TransceiversForm()
-    return render_to_response('transceiver.html', context, context_instance=RequestContext(request))
-
-@login_required
-def transceiverSearch(request):
-    return searchForTransceiver()
+    context['transceivers'] = Transceivers.objects.filter(type=context['type'])
+    context['transceiversForm'] = TransceiversForm()
+    return render_to_response('transceivers.html', context, context_instance=RequestContext(request))
 
 @login_required
 def devices(request):
@@ -95,11 +92,11 @@ def device(request, num="1"):
     return render_to_response('device.html', context, context_instance=RequestContext(request))
 
 
-@login_required
-def runActionView(request, deviceNum="1", action="0"):
-    # should be a permissions check here if it isn't already in the runcommand...
-    context = runAction(deviceNum, action)
-    return render_to_response('index.html', context, context_instance=RequestContext(request))
+#@login_required
+#def runActionView(request, deviceNum="1", action="0"):
+#    # should be a permissions check here if it isn't already in the runcommand...
+#    context = runAction(deviceNum, action)
+#    return render_to_response('index.html', context, context_instance=RequestContext(request))
 
 
 @login_required
@@ -207,24 +204,3 @@ def addFromLIRC(request, deviceID):
 @login_required
 def exportIR(request):
     return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
-
-##################
-# Helper Functions 
-##################
-
-def searchForTransceiver():
-    msg = False
-    try:
-        ser = serial.Serial(USB_PORT, 9600)
-        msg = str(ser.readline())
-    except Exception, exc:
-        print str(exc)
-    return HttpResponse(simplejson.dumps({'deviceType' : msg.split('_')[0] }), mimetype='application/javascript')
-
-def resetAllTransceivers():
-    IR_Transceivers.objects.all().delete()
-    try:
-        ser = serial.Serial(USB_PORT, 9600)
-        ser.write('reset')
-    except Exception, exc:
-        print str(exc)

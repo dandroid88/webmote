@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import patterns, include, url
 
-urls = patterns('', 
+urls = patterns('',
+   url(r'^x10/transceivers/$', 'X10.views.transceivers'),
    url(r'^x10/devices/$', 'X10.views.devices'),
    url(r'^x10/device/(?P<num>\d+)/$', 'X10.views.device'),
 #   url(r'^x10/state/$', 'X10.views.state'),

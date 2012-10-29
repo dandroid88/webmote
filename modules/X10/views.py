@@ -8,6 +8,7 @@ from X10.models import *
 @login_required
 def main(request):
     context = {}
+    context['transceivers'] = Transceivers.objects.filter(type='X10')
     context['devices'] = X10_Devices.objects.all()
     return render_to_response('x10.html', context, context_instance=RequestContext(request))
 
@@ -52,3 +53,23 @@ def device(request, num="1"):
     context['deviceForm'] = X10_DevicesForm(instance=device.getSubclassInstance())
     context['actions'] = device.actions_set.all()
     return render_to_response('x10_device.html', context, context_instance=RequestContext(request))
+
+@login_required
+def transceivers(request):
+    context = {}
+    context['type'] = 'X10'
+    if request.method == 'POST':
+        if 'addTransceiver' in request.POST:
+            newTForm = TransceiversForm(request.POST)
+            if newTForm.is_valid():
+                newTran = newTForm.save()
+                newTran.assignID()
+            else:
+                context['error'] = "Transciever was invalid."
+        elif 'deleteTransceiver' in request.POST:
+            Transceivers.objects.filter(id=request.POST['deleteTransceiver'])[0].delete()
+        elif 'resetTransceivers' in request.POST:
+            resetAllTransceivers()
+    context['transceivers'] = Transceivers.objects.filter(type=context['type'])
+    context['transceiversForm'] = TransceiversForm()
+    return render_to_response('transceivers.html', context, context_instance=RequestContext(request))

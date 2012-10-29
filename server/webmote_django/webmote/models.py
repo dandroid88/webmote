@@ -47,6 +47,10 @@ class Actions(models.Model):
     def runAction(self):
         return self.getSubclassInstance().runAction()
 
+    def getTransceiver(self):
+        transceiver = Transceivers.objects.filter(id=self.device.getSubclassInstance().transceiver.id)[0]
+        return transceiver if transceiver else False
+
     def __unicode__(self):
         if self.device:
             return u'%s (%s)' % (self.name, self.device)
@@ -58,6 +62,44 @@ class ActionsForm(ModelForm):
     name = forms.CharField(widget=forms.TextInput(attrs={'placeholder': 'e.g. On, Off, etc.'}))
     class Meta:
         model = Actions
+
+################
+# Transcievers
+################
+
+class Transceivers(models.Model):
+    location = models.CharField(max_length=100)
+    usbPort = models.CharField(max_length=100)
+    type = models.CharField(max_length=100)
+    class Meta:
+        app_label = 'webmote'
+
+    def assignID(self, reset = False):
+        try:
+            ser = serial.Serial('/dev/' + self.usbPort, 9600)
+            if reset:
+                ser.write("%04x" % self.id + 'a'.encode("hex") + "%04x" % 0)
+                print 'Deleting Transceiver ' + str(self.id)
+            else:
+                ser.write("%04x" % 0 + 'a'.encode("hex") + "%04x" % self.id)
+                print 'Assigned Tranceiver ID: ' + str(self.id)
+        except Exception, exc:
+            print str(exc)
+        
+    def delete(self, *args, **kwargs):
+        self.assignID(True)
+        super(Transceivers, self).delete(*args, **kwargs)
+
+    def __unicode__(self):
+        return u'%s' % (self.location)
+
+class TransceiversForm(ModelForm):
+    location = forms.CharField(widget=forms.TextInput(attrs={'placeholder' : 'e.g. Kitchen, Den, etc.'}))
+    usbPort = forms.CharField(widget=forms.HiddenInput())
+    type = forms.CharField(widget=forms.HiddenInput())
+    class Meta:
+        model = Transceivers
+        app_label = 'webmote'
 
 #################
 # Users Info

@@ -58,6 +58,30 @@ def runAction(request, id):
     action.runAction()
     return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
+@login_required
+def transceiverSearch(request, type, port):
+    msg = False
+    try:
+        ser = serial.Serial('/dev/' + port, 9600)
+        msg = str(ser.readline()).split('_')[0]
+        if not msg in type:
+            msg = ''
+    except Exception, exc:
+        print str(exc)
+    return HttpResponse(simplejson.dumps({'deviceType' : msg}), mimetype='application/javascript')
+
+##################
+# Helper Functions 
+##################
+
+# This is going to be reworked eventually
+#def resetAllTransceivers(port):
+#    Transceivers.objects.all().delete()
+#    try:
+#        ser = serial.Serial(port, 9600)
+#        ser.write('reset')
+#    except Exception, exc:
+#        print str(exc)
 
 ########################
 # Load Modules views.py

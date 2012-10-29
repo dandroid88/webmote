@@ -13,7 +13,10 @@
 {% block content %}
     <div data-role="content">	
         <ul data-role="listview" data-inset="true" id="userOptions">
-            <li><a href="devices/">Devices ({{ devices.count }})</a></li>
+            <li><a href="transceivers/">Transceivers ({{ transceivers.count }})</a></li>
+            {% if transceivers %}
+                <li><a href="devices/">Devices ({{ devices.count }})</a></li>
+            {% endif %}
             <li><a href="help/">Help/How-to</a></li>
         </ul>
     </div>
