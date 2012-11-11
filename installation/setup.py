@@ -5,5 +5,6 @@ def after_install(options, home_dir):
     subprocess.call([join(home_dir, 'bin', 'pip'), 'install', 'pyserial'])
     subprocess.call([join(home_dir, 'bin', 'pip'), 'install', 'jsonrpclib'])
     subprocess.call([join(home_dir, 'bin', 'pip'), 'install', 'beautifulsoup4'])
+    subprocess.call([join(home_dir, 'bin', 'pip'), 'install', 'python-crontab'])
 """))
 print output

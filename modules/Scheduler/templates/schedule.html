@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Example
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Schedular
+{% endblock %}
+{% block content %}
+    <div data-role="content">
+        <h2>{{ schedule.name }}</h2>
+        {% if schedule.schedlet_set %}
+            <div class="ui-grid-a" id="schedlet_grid_fields">
+                <div class="ui-block-a">
+                    <div class="ui-bar ui-bar-a" style="height:30px">Action</div>
+                </div>
+                <div class="ui-block-b">
+                    <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
+                </div>
+            </div>
+            {% for s in schedule.schedlet_set.all %}
+                <div class="ui-grid-a" id="schedlet_grid_row_{{ s.id }}">
+                    <div class="ui-block-a">
+                        <div class="ui-bar ui-bar-a" style="height:30px">
+                            {{ s.action.name }}
+                        </div>
+                    </div>
+                    <div class="ui-block-b">
+                        <div class="ui-bar ui-bar-a" style="height:30px">
+                            <form method="post" action="">{% csrf_token %}
+                                <input type="submit" name="deleteSchedlet" value="Delete" onclick="this.value='{{ s.id }}';this.form.post()"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h3>Currently there are no schedlets in this schedule...</h3>
+        {% endif %}
+        <div id="ScheduleForm">
+            <h2>Add a Schedlet</h2>
+            <form name="newSchedlet" method="POST">{% csrf_token %}
+                {{ schedletForm.as_table }}
+                <input type="submit" name="newSchedlet" value="Add Schedlet" />
+            </form>
+        </div>
+    </div>
+{% endblock %}

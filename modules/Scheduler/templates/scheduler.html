@@ -1,0 +1,69 @@
+{% extends "base.html" %}
+{% comment %}
+{% extends "jqm/simple.html" %}
+{% endcomment %}
+
+{% block title %}
+    Webmote - Example
+{% endblock %}
+
+{% block page_title %}
+    Webmote - Schedular
+{% endblock %}
+{% block content %}
+    <div data-role="content">
+        <script type="text/javascript" src="{{ STATIC_URL }}Scheduler.js"></script>
+        <h2>Schedules</h2>
+        {% if schedules %}
+            <div class="ui-grid-b" id="schedules_grid_fields">
+                <div class="ui-block-a">
+                    <div class="ui-bar ui-bar-a" style="height:30px">Name</div>
+                </div>
+                <div class="ui-block-b">
+                    <div class="ui-bar ui-bar-a" style="height:30px">Active</div>
+                </div>
+                <div class="ui-block-c">
+                    <div class="ui-bar ui-bar-a" style="height:30px">Delete</div>
+                </div>
+            </div>
+            {% for s in schedules %}
+                <div class="ui-grid-b" id="schedules_grid_row_{{ s.id }}">
+                    <div class="ui-block-a">
+                        <div class="ui-bar ui-bar-a" style="height:30px">
+                            <a href="/scheduler/schedule/{{ s.id }}">{{ s.name }}</a>
+                        </div>
+                    </div>
+                    <div class="ui-block-b">
+                        <div class="ui-bar ui-bar-a" style="height:30px">
+                            <select class="schedule-active" name="flip-min" id="flip-min-{{ s.id }}" data-role="slider">
+                                {% if s.active %}
+    		                        <option value="False">Off</option>
+    		                        <option value="True" selected="selected">On</option>
+                                {% else %}
+    		                        <option value="False" selected="selected">Off</option>
+    		                        <option value="True">On</option>
+                                {% endif %}
+	                        </select>
+                        </div>
+                    </div>
+                    <div class="ui-block-c">
+                        <div class="ui-bar ui-bar-a" style="height:30px">
+                            <form method="post" action="">{% csrf_token %}
+                                <input type="submit" name="deleteSchedule" value="Delete" onclick="this.value='{{ s.id }}';this.form.post()"/>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        {% else %}
+            <h3>Currently there are no schedules...</h3>
+        {% endif %}
+        <div id="ScheduleForm">
+            <h2>Add a Schedule</h2>
+            <form name="newSchedule" method="POST">{% csrf_token %}
+                {{ scheduleForm.as_table }}
+                <input type="submit" name="newSchedule" value="Add Schedule" />
+            </form>
+        </div>
+    </div>
+{% endblock %}
