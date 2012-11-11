@@ -48,7 +48,9 @@ def editActive(request, id="0"):
 
 def runSchedlet(request, id="0"):
     if '127.0.0.1' in request.META['REMOTE_ADDR']:
-        Schedlet.objects.filter(id=id)[0].action.runAction() 
+        schedlet = Schedlet.objects.filter(id=id)[0]
+        if schedlet.schedule.active:
+            schedlet.action.runAction()
         return HttpResponse(simplejson.dumps(''), mimetype='application/javascript')
 
  
