@@ -62,13 +62,11 @@ void setup() {
 }
 
 void loop() {
-    
-
     if (!transceiverID) {
         requestID();
     }
   
-    if (Serial.available() > 2) {
+    if (Serial.available() > 3) {
         while (Serial.available()) {
             if (index < MAXMSGLEN - 1) {
                 inChar = Serial.read();
