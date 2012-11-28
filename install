@@ -7,6 +7,12 @@ python webmote-env.py webmote-env
 rm webmote-env.py
 
 cp -a utils/* .
-echo "Webmote needs your permission to communicate with USB devices"
-sudo usermod -a -G tty $(logname)
-sudo usermod -a -G dialout $(logname)
+
+if [[ `groups $(logname)` != *tty* ]]
+then
+  echo "Webmote needs your permission to communicate with USB devices"
+  sudo usermod -a -G tty $(logname)
+  sudo usermod -a -G dialout $(logname)
+  echo "You will need to logout and log back in to communicate with USB devices via webmote."
+fi
+
