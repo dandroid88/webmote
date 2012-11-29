@@ -94,6 +94,13 @@ Setup Transceivers:
         * Open IR\_transceiver.pde via arduino (found in webmote/modules/IR/IR\_tranceiver)
         * Click 'upload' - circle with right arrow
 
+* One thing to note is that by default, arduinos are reset when a serial connection is initiated (which webmote does from time to time...) which can cause problems with commands being lost while the arduino is in its reset sequence.
+    * You are experiencing this if
+        * When sending a command your tx/rx lights are active (you are talking to the device correctly) AND
+        * The console or logfile does not have a message saying "Failed to play" AND
+        * When sending a command nothing happens
+    * The simplest fix is placing a small capacitor (2.2 uF works for me) between "reset" and "3v3"
+
 Run (development server):
 -------------------------
 ```bash
