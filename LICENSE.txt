@@ -1,6 +1,6 @@
 It is the intent of this file to describe two use cases for the Webmote software and the licenses that apply to each.
 
-If you are making money with (directly or indirectly) this code/project in any way, permission must be obtained through Daniel Myers (DanielMyers2007@u.northwestern.edu).
+If you are making money with (directly or indirectly) this code/project in any way, permission must be obtained through Daniel Myers (DanielMyers2007 at u.northwestern.edu).
 
 Otherwise, the GPL applies which is available below.
 
