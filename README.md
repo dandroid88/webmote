@@ -77,7 +77,7 @@ cd webmote
 
 Setup Transceivers:
 -------------------
-#* X10  
+## X10  
     * Basics can be found here: http://www.arduino.cc/en/Tutorial/x10  
     * Pins in sketch:  
         * Zero Crossing - 12
@@ -96,7 +96,7 @@ Setup Transceivers:
 
 
 
-#* IR
+## IR
     * Basics can be found at http://www.arcfn.com/2009/08/multi-protocol-infrared-remote-library.html
     * Pins in sketch:
         * Recieve - 11
