@@ -80,9 +80,9 @@ Setup Transceivers:
 * X10  
     * Basics can be found here: http://www.arduino.cc/en/Tutorial/x10  
     * Pins in sketch:  
-        * zero crossing - 12
-        * data tx - 13
-        * data rx - 1 (rx isn't actually used at the moment)
+        * Zero Crossing - 12
+        * Data TX - 13
+        * Data RX - 1 (rx isn't actually used at the moment)
     * Download the X10 library and put it in the arduino libraries folder 
         * on ubuntu 12.10 - /usr/share/arduino/libraries
         * will probably need to be root to copy to this directory
@@ -90,12 +90,17 @@ Setup Transceivers:
         * Open X10\_transceiver.pde via arduino (found in webmote/modules/X10/X10\_tranceiver)
         * Click 'upload' - circle with right arrow
 
+<p align="center">
+  <img src="https://raw.github.com/dandroid88/webmote/master/modules/X10/X10_transceiver/Arduino---PSC05.png"/>
+</p>
+
+
+
 * IR
     * Basics can be found at http://www.arcfn.com/2009/08/multi-protocol-infrared-remote-library.html
     * Pins in sketch:
         * Recieve - 11
         * IR - 3
-        * Button - 8
         * Status - 13
     * Download the library and put it in the arduino libraries folder
         * available at https://github.com/shirriff/Arduino-IRremote
@@ -104,6 +109,11 @@ Setup Transceivers:
     * Flash Sketch
         * Open IR\_transceiver.pde via arduino (found in webmote/modules/IR/IR\_tranceiver)
         * Click 'upload' - circle with right arrow
+
+<p align="center">
+  <img src="https://raw.github.com/dandroid88/webmote/master/modules/IR/IR_transceiver/Webmote---Infrared-Transceiver.png"/>
+</p>
+
 
 * One thing to note is that by default, arduinos are reset when a serial connection is initiated (which webmote does from time to time...) which can cause problems with commands being lost while the arduino is in its reset sequence.
     * You are experiencing this if:
