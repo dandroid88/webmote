@@ -77,38 +77,38 @@ cd webmote
 
 Setup Transceivers:
 -------------------
-## X10  
-    * Basics can be found here: http://www.arduino.cc/en/Tutorial/x10  
-    * Pins in sketch:  
-        * Zero Crossing - 12
-        * Data TX - 13
-        * Data RX - 1 (rx isn't actually used at the moment)
-    * Download the X10 library and put it in the arduino libraries folder 
-        * on ubuntu 12.10 - /usr/share/arduino/libraries
-        * will probably need to be root to copy to this directory
-    * Flash Sketch
-        * Open X10\_transceiver.pde via arduino (found in webmote/modules/X10/X10\_tranceiver)
-        * Click 'upload' - circle with right arrow
+### X10  
+* Basics can be found here: http://www.arduino.cc/en/Tutorial/x10  
+* Pins in sketch:  
+    * Zero Crossing - 12
+    * Data TX - 13
+    * Data RX - 1 (rx isn't actually used at the moment)
+* Download the X10 library and put it in the arduino libraries folder 
+    * on ubuntu 12.10 - /usr/share/arduino/libraries
+    * will probably need to be root to copy to this directory
+* Flash Sketch
+    * Open X10\_transceiver.pde via arduino (found in webmote/modules/X10/X10\_tranceiver)
+    * Click 'upload' - circle with right arrow
 
 <p align="center">
-  <img src="https://raw.github.com/dandroid88/webmote/master/modules/X10/X10_transceiver/Arduino---PSC05.png"/>
+    <img src="https://raw.github.com/dandroid88/webmote/master/modules/X10/X10_transceiver/Arduino---PSC05.png"/>
 </p>
 
 
 
-## IR
-    * Basics can be found at http://www.arcfn.com/2009/08/multi-protocol-infrared-remote-library.html
-    * Pins in sketch:
-        * Recieve - 11
-        * IR - 3
-        * Status - 13
-    * Download the library and put it in the arduino libraries folder
-        * available at https://github.com/shirriff/Arduino-IRremote
-        * on ubuntu 12.10 - /usr/share/arduino/libraries
-        * will probably need to be root to copy to this directory
-    * Flash Sketch
-        * Open IR\_transceiver.pde via arduino (found in webmote/modules/IR/IR\_tranceiver)
-        * Click 'upload' - circle with right arrow
+### IR
+* Basics can be found at http://www.arcfn.com/2009/08/multi-protocol-infrared-remote-library.html
+* Pins in sketch:
+    * Recieve - 11
+    * IR - 3
+    * Status - 13
+* Download the library and put it in the arduino libraries folder
+    * available at https://github.com/shirriff/Arduino-IRremote
+    * on ubuntu 12.10 - /usr/share/arduino/libraries
+    * will probably need to be root to copy to this directory
+* Flash Sketch
+    * Open IR\_transceiver.pde via arduino (found in webmote/modules/IR/IR\_tranceiver)
+    * Click 'upload' - circle with right arrow
 
 <p align="center">
   <img src="https://raw.github.com/dandroid88/webmote/master/modules/IR/IR_transceiver/Webmote---Infrared-Transceiver.png"/>
