@@ -1,7 +1,8 @@
 <p align="center">
   <img src="https://raw.github.com/dandroid88/webmote/master/server/webmote_django/static/remote.png"/>
   <img src="https://raw.github.com/dandroid88/webmote/master/server/webmote_django/static/record.png"/>
-  </br>
+</p>
+<p>
   <a href="https://plus.google.com/photos/114801052085717416954/albums/5244814407639128177">More Screenshots</a>
 </p>
 
