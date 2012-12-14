@@ -1,0 +1,50 @@
+#menu {
+  position: absolute;
+  background-image:url('cartographer.png');
+  background-repeat:repeat-y;
+  top: 0px;
+  left: -165px;
+  width: 165px;
+  height: 100%;
+  display: block !important;
+  text-align: center;
+  float: left;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+#menu h3{
+	font-family:arial;
+	font-size:12px;
+	color:#fff;
+	margin:0;
+	background-color:#5a5959;
+	padding:4px 0 4px 0px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(5%,rgba(90,89,89,1)), color-stop(85%,rgba(66,65,65,1)));
+	border-top:solid #6b6b6b 1px;
+	text-shadow: 0px -1px 1px #333;
+}
+#menu ul {
+  margin: 0;
+  padding: 0;
+  width: inherit;
+}
+#menu ul li {
+  list-style-type: none;
+  margin: 0px 0;
+}
+#menu ul li a:link, #menu ul li a:visited {
+  box-shadow: 0 1px 0 #727272;
+  color: #fff;
+  font-size: 14px;
+  font-family: arial;
+  text-decoration: none;
+  width: 165px;
+  display: block;
+  padding: 10px 0px 10px 0px;
+  text-shadow: 0px 1px 1px #000000;
+}
+
+#menu ul li a:hover, #menu ul li a:active {
+  background-color: #716f6f;
+}

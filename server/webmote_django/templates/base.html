@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="{{ STATIC_URL }}js/jqm/jquery.mobile-1.0.min.css" />
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery-1.6.4.min.js"></script>
 
-    <!-- webmote js -->
+    <!-- webmote -->
+    <link rel="stylesheet" href="{{ STATIC_URL }}css/menu.css" />
     <script type="text/javascript" src="{{ STATIC_URL }}js/base.js"></script>
 
     <script type="text/javascript">
@@ -22,7 +23,7 @@
             $.mobile.ajaxFormsEnabled = false;
             $.mobile.ajaxLinksEnabled = false;
             $.mobile.pushStateEnabled = false;
-//            $.mobile.defaultPageTransition = 'none';
+            $.mobile.defaultPageTransition = 'none';
         });
     </script>
     <script type="text/javascript" src="{{ STATIC_URL }}js/jqm/jquery.mobile-1.0.min.js"></script>
@@ -36,10 +37,21 @@
 
 <body id="{% block body_id %}{% endblock %}">
     <div id="body">
+        <div id="menu">
+        <h3>Menu</h3>
+            <ul>
+                <li><a href="/" class="contentLink">Home</a></li>
+                <li><a href="/custom_remotes/" class="contentLink">Remotes</a></li>
+                <li><a href="/ir/" class="contentLink">IR</a></li>
+                <li><a href="/x10/" class="contentLink">X10</a></li>
+                <li><a href="/help/" class="contentLink">Help</a></li>
+            </ul>
+        </div>
         {% block body %}
         <div>
             <div data-role="header" data-position="inline">
-        	    <a href="/" data-icon="home">Home</a>
+<!--        	    <a href="/" data-icon="home">Home</a>-->
+                <a id="showMenu" data-rel="popup" data-transition="slide" data-position-to="window" data-role="button" data-icon="grid">Menu</a>
         	    <h1>
                     {% block page_title %}
                     {% endblock %}
