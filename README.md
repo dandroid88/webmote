@@ -1,7 +1,8 @@
 <p align="center">
   <img src="https://raw.github.com/dandroid88/webmote/master/server/webmote_django/static/remote.png"/>
   <img src="https://raw.github.com/dandroid88/webmote/master/server/webmote_django/static/record.png"/>
-<a href="https://plus.google.com/photos/114801052085717416954/albums/5244814407639128177">More Screenshots</a>
+  </br>
+  <a href="https://plus.google.com/photos/114801052085717416954/albums/5244814407639128177">More Screenshots</a>
 </p>
 
 The original project is located at https://github.com/azylman/webmote and was written by Daniel Myers, Alex Wilson, and Alex Zylman. This rewrite serves to improve extensibility by using a plugin architechture with a minimal core and plugins for features or protocols.
